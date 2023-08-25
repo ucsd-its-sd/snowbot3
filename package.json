@@ -1,0 +1,14 @@
+{
+  "name": "snowbot3",
+  "version": "3.0.0",
+  "description": "Third incarnation of SNOWbot, basically the same but not on my Discord account :)",
+  "main": "snowbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jim Villani",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.13.0"
+  }
+}
