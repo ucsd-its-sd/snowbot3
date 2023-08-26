@@ -23,8 +23,8 @@ client.on('messageCreate', msg => {
   if (index >= 0 && !isNaN(msg.content.substring(3+index,10+index))){
     var args = msg.content.substring(1+index,10+index);
     //msg.channel.send('https://support.ucsd.edu/nav_to.do?uri=task.do?sysparm_query=number=' + args);
-	const csEmbed = new Discord.MessageEmbed().setDescription('[Case ' + args.toUpperCase() + '](https://support.ucsd.edu/nav_to.do?uri=task.do?sysparm_query=number=' + args + ')');
-	msg.channel.send(csEmbed);
+	const csEmbed = new Discord.EmbedBuilder().setDescription('[Case ' + args.toUpperCase() + '](https://support.ucsd.edu/nav_to.do?uri=task.do?sysparm_query=number=' + args + ')');
+	msg.channel.send({embeds: [csEmbed]});
   }
 
   //commands with no input reading
@@ -144,15 +144,15 @@ client.on('messageCreate', msg => {
 	  if(msg.content.includes("!kb")){
         var args = msg.content.substring(4+msg.content.indexOf("!kb"));
 		var argsURL = encodeURI(args);
-		const kbResults = new Discord.MessageEmbed().setDescription('[Knowledge Base Search Results for ' + args + '](https://support.ucsd.edu/its?id=search&spa=1&q=' + argsURL + ")");
-		msg.channel.send(kbResults);
+		const kbResults = new Discord.EmbedBuilder().setDescription('[Knowledge Base Search Results for ' + args + '](https://support.ucsd.edu/its?id=search&spa=1&q=' + argsURL + ")");
+		msg.channel.send({embed: [kbResults]});
       }
 	  
 	  if(msg.content.includes("!collab")){
         var args = msg.content.substring(8+msg.content.indexOf("!collab"));
 		var argsPlus = args.split(' ').join('+');;
-		const collabResults = new Discord.MessageEmbed().setDescription('[Collab Search Results for ' + args + '](https://collab.ucsd.edu/dosearchsite.action?cql=siteSearch+~+%22' + argsPlus +'%22+and+space+%3D+%22CKB%22)');
-		msg.channel.send(collabResults);
+		const collabResults = new Discord.EmbedBuilder().setDescription('[Collab Search Results for ' + args + '](https://collab.ucsd.edu/dosearchsite.action?cql=siteSearch+~+%22' + argsPlus +'%22+and+space+%3D+%22CKB%22)');
+		msg.channel.send({embed: [collabResults]});
       }
 	  
 	  if(msg.content.includes("!p ")){
@@ -160,8 +160,8 @@ client.on('messageCreate', msg => {
 		if(args.indexOf(" ") >= 0){
 			var args = args.substring(0,args.indexOf(" "));
 		}
-		const mailupdResults = new Discord.MessageEmbed().setDescription('[MailUPD page for ' + args + '](https://mailupd.ucsd.edu/view?id=' + args + ')');
-		msg.channel.send(mailupdResults);
+		const mailupdResults = new Discord.EmbedBuilder().setDescription('[MailUPD page for ' + args + '](https://mailupd.ucsd.edu/view?id=' + args + ')');
+		msg.channel.send({embed: [mailupdResults]});
       }
 	  
 	  /*if(msg.content.includes("!sneaky")){
