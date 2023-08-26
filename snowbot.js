@@ -145,7 +145,7 @@ client.on('messageCreate', msg => {
         var args = msg.content.substring(4+msg.content.indexOf("!kb"));
 		var argsURL = encodeURI(args);
 		const kbResults = new Discord.EmbedBuilder().setDescription('[Knowledge Base Search Results for ' + args + '](https://support.ucsd.edu/its?id=search&spa=1&q=' + argsURL + ")");
-		msg.channel.send({embed: [kbResults]});
+		msg.channel.send({embeds: [kbResults]});
       }
 	  
 	  if(msg.content.includes("!collab")){
