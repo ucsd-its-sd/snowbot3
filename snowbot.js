@@ -211,6 +211,10 @@ client.on('messageCreate', msg => {
     if(msg.content.includes(":orangutan:")){
       msg.channel.send("<@266023244539232257>");
     }
+  
+  //Aedan
+    if(msg.content.includes(":kermlove:"))
+    msg.channel.send("<@299020647198228480>")
 
     //#endregion
   }
@@ -318,7 +322,8 @@ const phonebook = new Discord.EmbedBuilder()
 .setTitle('Phonebook')
 .setThumbnail('https://cdn.discordapp.com/attachments/765777043639762948/787101249764851742/e39ec5942bc69d0a6392f507ff3321ed.png')
 .addFields({
-    name: "<:snorlax:784554135420272640>",
+    // name: "<:snorlax:784554135420272640>",
+    name: "<:snorlax:>",
     value: "snorlax dials Jenny"
 },{
     name: "<:bandanadee:785003854857109524>",
