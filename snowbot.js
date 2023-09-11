@@ -253,22 +253,22 @@ client.on('messageCreate', msg => {
   }
 
 	//Steve Kermit GIF
-	if(msg.content.includes("<@!97838330716094464>")){
+	if(msg.content.includes("<@97838330716094464>")){
 		if(getRandomInt(1,100) <= 30){ 
 			msg.channel.send('https://cdn.discordapp.com/attachments/765777043639762948/788514133477818429/UsherKermit.gif');
 		}
   }
 	
-  console.log(msg.content)
+  //console.log(msg.content)
 	//Jenny Elmo GIF
-	if(msg.content.includes("<@!491450429679468565>")){
-		//if(true){ 
+	if(msg.content.includes("<@491450429679468565>")){
+		if(getRandomInt(1,100) <= 17){ 
 			msg.channel.send('https://cdn.discordapp.com/attachments/765777043639762948/788513996763693076/elmo.gif');
-    //}
+    }
   }
 
   //Party Robyn Gif
-  if(msg.content.includes("<@!690663566239596615>")){
+  if(msg.content.includes("<@690663566239596615>")){
     if(true){
       msg.channel.send('https://cdn.discordapp.com/attachments/787254252077580289/1149162996342468608/partyoiseaur.gif')
     }
