@@ -209,28 +209,28 @@ client.on('messageCreate', msg => {
       msg.channel.send("<@880110499512061964>");
     }
 	
-	//Ivan
+	  //Ivan
     if(msg.content.includes(":concern:")){
       msg.channel.send("<@283414458590822401>");
     }
 	
-	//Steven
+	  //Steven
     if(msg.content.includes(":orang:")){
       msg.channel.send("<@138143243559895040>");
     }
 	
 	
-	//Rolando
+	  //Rolando
     if(msg.content.includes(":AAA:")){
       msg.channel.send("<@96402723435446272>");
     }
 	
-	//Mingson
+	  //Mingson
     if(msg.content.includes(":orangutan:")){
       msg.channel.send("<@266023244539232257>");
     }
   
-  //Aedan
+    //Aedan
     if(msg.content.includes(":ThatDawg:")){
       msg.channel.send("<@299020647198228480>");
     }
@@ -257,18 +257,18 @@ client.on('messageCreate', msg => {
 		if(getRandomInt(1,100) <= 30){ 
 			msg.channel.send('https://cdn.discordapp.com/attachments/765777043639762948/788514133477818429/UsherKermit.gif');
 		}
-    }
+  }
 	
 	//Jenny Elmo GIF
 	if(msg.content.includes("<@!491450429679468565>")){
-		if(getRandomInt(1,100) <= 17){ 
+		if(true){ 
 			msg.channel.send('https://cdn.discordapp.com/attachments/765777043639762948/788513996763693076/elmo.gif');
 		}
-    }
+  }
 
   //Party Robyn Gif
   if(msg.content.includes("<@!690663566239596615>")){
-    if(getRandomInt(1,100) <= 100){
+    if(true){
       msg.channel.send('https://cdn.discordapp.com/attachments/787254252077580289/1149162996342468608/partyoiseaur.gif')
     }
   }
