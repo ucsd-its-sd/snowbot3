@@ -267,11 +267,11 @@ client.on('messageCreate', msg => {
     }
 
   //Party Robyn Gif
-  /*if(msg.content.includes("<@!690663566239596615>")){
+  if(msg.content.includes("<@!690663566239596615>")){
     if(getRandomInt(1,100) <= 100){
-      msg.channel.send('')
+      msg.channel.send('https://cdn.discordapp.com/attachments/787254252077580289/1149162996342468608/partyoiseaur.gif')
     }
-  }*/
+  }
 	
 	//man u guys really like your puppets dont you
 
