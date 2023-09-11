@@ -403,6 +403,9 @@ const phonebook = new Discord.EmbedBuilder()
     name : "<:bumis:916554784625025116>",
     value: "bumis dials Tae"
 },{
+    name: "<:dabariana:1150859157273055343>",
+    value: "dabariana dials Ariana"
+},{
     name: "@Steve",
     value: "@Steve dials Kermit 30% of the time."
 },{
