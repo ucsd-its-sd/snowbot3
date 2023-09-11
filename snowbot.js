@@ -226,7 +226,7 @@ client.on('messageCreate', msg => {
     }
 	
 	  //Mingson
-    if(msg.content.includes(":orangutan:")){
+    if(msg.content.includes(":orangutan:")||msg.content.includes("🦧")){
       msg.channel.send("<@266023244539232257>");
     }
   
@@ -240,7 +240,7 @@ client.on('messageCreate', msg => {
       msg.channel.send("<@339622598407225354>")
     }
 
-    //Arianna
+    //Ariana
     if(msg.content.includes(":dabariana:")){
       msg.channel.send("<@498262016973078549>")
     }
