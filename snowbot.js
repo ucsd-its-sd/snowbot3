@@ -76,8 +76,8 @@ client.on('messageCreate', msg => {
         //IDArray = [299020647198228480,419970850519777280,283414458590822401,266023244539232257,298696268920913924,147954160526950411,718326776165826580,687482247955218483,136447120658923520,
         //Rolando         Lola
         //96402723435446272,472305444518494208];
-        JustMe = [299020647198228480]
-        msg.channel.send(`<!@${JustMe[0]}> Fired`)
+        JustMe = ['299020647198228480']
+        msg.channel.send(`<@${JustMe[0]}> Fired`)
         //toFire = getRandomInt(0,10);
         //msg.channel.send(`<@${IDArray[toFire]}> Fired`);
 			  /*switch(getRandomInt(0,9)) { //0-5 gives 6 options, current number of leads
@@ -214,7 +214,7 @@ client.on('messageCreate', msg => {
 
     //Jenny
     if(msg.content.includes(":snorlax:")){
-      msg.channel.send("<@!491450429679468565>");
+      msg.channel.send("<@491450429679468565>");
     }
 
 
