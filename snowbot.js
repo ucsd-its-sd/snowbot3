@@ -380,13 +380,13 @@ const phonebook = new Discord.EmbedBuilder()
     name: "<:orangutan:266023244539232257>",
     value: "orangutan dials Mingson"
 },{
-    name: "<:ThatDawg:299020647198228480>",
+    name: "<:ThatDawg:1150857342968152211>",
     value: "ThatDawg dials Aedan"
 },{
-    name: "<:fingergunsleft:339622598407225354>",
+    name: "<:fingergunsleft:785979564697452574>",
     value: "fingergunsleft dials Dylan"
 },{
-    name: "<:laoo:419970850519777280>",
+    name: "<:laoo:1088529626105647114>",
     value: "laoo dials Kevin"
 },{
     name: "@Steve",
