@@ -377,6 +377,9 @@ const phonebook = new Discord.EmbedBuilder()
     name: "<:dabariana:1150859157273055343>",
     value: "dabariana dials Ariana"
 },{
+    name: "<:bang:1088606779748913292>",
+    value: "bang dials Vincent"
+},{
     name: "@Steve",
     value: "@Steve dials Kermit 30% of the time."
 },{
