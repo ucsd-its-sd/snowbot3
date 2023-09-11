@@ -24,178 +24,136 @@ client.on('messageCreate', msg => {
   if (index >= 0 && !isNaN(msg.content.substring(3+index,10+index))){
     var args = msg.content.substring(1+index,10+index);
     //msg.channel.send('https://support.ucsd.edu/nav_to.do?uri=task.do?sysparm_query=number=' + args);
-	const csEmbed = new Discord.EmbedBuilder().setDescription('[Case ' + args.toUpperCase() + '](https://support.ucsd.edu/nav_to.do?uri=task.do?sysparm_query=number=' + args + ')');
-	msg.channel.send({embeds: [csEmbed]});
+	  const csEmbed = new Discord.EmbedBuilder().setDescription('[Case ' + args.toUpperCase() + '](https://support.ucsd.edu/nav_to.do?uri=task.do?sysparm_query=number=' + args + ')');
+	  msg.channel.send({embeds: [csEmbed]});
   }
 
   //commands with no input reading
   if (msg.content.includes("!")){
     //dumb commands collapsed in here
     //#region 
-      if(msg.content.includes("!joke")){
-        msg.channel.send('josh');
-      }
+    if(msg.content.includes("!joke")){
+      msg.channel.send('josh');
+    }
 
-      if(msg.content.includes("!ping")){
-        msg.channel.send('pong');
-      }
-	  
-      if(msg.content.includes("!ding")){
-        msg.channel.send('dong');
-      }
-	  
-      if(msg.content.includes("!aloha")){
-        msg.channel.send('World class customer service!');
-      }
-
-      if(msg.content.includes("!sleep")){
-        msg.channel.send('go to bed',{
-          tts: true
-        });
-      }
-
-      if(msg.content.includes("!sammy")){
-        msg.channel.send('sigh');
-      }
-
-      if(msg.content.includes("!loudsammy")){
-        msg.channel.send('sigh',{
-          tts: true
-        });
-      }
-
-      //BOB FIRED
-      if(msg.content.includes("!fired")){
-		    if(msg.author.id == "718538581421064232"){
-			  msg.delete();
-			  msg.channel.send('<@718538581421064232> FIRED'); //Ari firing
-		    } 
-      else
-      {
-        //0-10     Aedan                 Kevin                Ivan                 Mingson              Jeremy               Bryce                Kelly                Tae                  Vincent
-        IDArray = ['299020647198228480','419970850519777280','283414458590822401','266023244539232257','298696268920913924','147954160526950411','718326776165826580','687482247955218483','136447120658923520',
-        //Rolando            Lola
-        '96402723435446272','472305444518494208'];
-        toFire = getRandomInt(0,10);
-        msg.channel.send(`<@${IDArray[toFire]}> Fired`);
-			  /*switch(getRandomInt(0,9)) { //0-5 gives 6 options, current number of leads
-				  case 0:
-					  msg.channel.send('<@299020647198228480> FIRED'); //Aedan
-					  break;
-				  case 1:
-					  msg.channel.send('<@419970850519777280> FIRED'); //Kevin
-					  break;
-				  case 2:
-					  msg.channel.send('<@283414458590822401> FIRED'); //Ivan
-					  break;
-				  case 3:
-					  msg.channel.send('<@266023244539232257> FIRED'); //Mingson
-					  break;
-				  case 4:
-					  msg.channel.send('<@298696268920913924> FIRED'); //Jeremy
-					  break;
-				  case 5:
-					  msg.channel.send('<@147954160526950411> FIRED'); //Bryce
-					  break;
-				  case 6:
-					msg.channel.send('<@718326776165826580> FIRED'); //Kelly
-					break;
-				case 7:
-					msg.channel.send('<@687482247955218483> FIRED'); //Tae
-					break;
-				case 8:
-					msg.channel.send('<@136447120658923520> FIRED'); //Vincent
-					break;
-				case 9:
-					msg.channel.send('<@96402723435446272> FIRED'); //Rolando
-					break;
-				default: 
-					msg.channel.send('<@472305444518494208> FIRED'); //Lola Default
-					break;
-			}*/
-		}
-        //msg.channel.send('<@!125813294773698561> FIRED');
-      }
-
-      //nice one
-      if(msg.content.toLowerCase().includes("!cscs")){
-        msg.channel.send('delete the extra cs!');
-      }
-
-      
-      //Sammy GIF
-      if(msg.content.includes("!hyper")){
-        msg.channel.send('https://cdn.discordapp.com/attachments/765777043639762948/775841239878074388/sammy.gif');
-      }
-      
-      //BIRD
-      if(msg.content.includes("!parrot")){
-        msg.channel.send('https://media.discordapp.net/attachments/765777043639762948/784559806630330398/bird.gif');
-      }
-
-      //TOAD
-      if(msg.content.includes("!toad")){
-        msg.channel.send('https://cdn.discordapp.com/attachments/765777043639762948/784565365949857842/toad.gif');
-      }
-
-      //#endregion
-
-      //Useful Stuff
-      //#region 
-      //FS
-      if (msg.content.includes("!fs")||msg.content.includes('!fieldsupport')){
-        msg.channel.send('https://cdn.discordapp.com/attachments/765777043639762948/784567793047699496/fs-map.png');
-      }
-	  
-	  if (msg.content.toLowerCase().includes("!nato")){
-        msg.channel.send('https://media.discordapp.net/attachments/765777043639762948/886307401106604123/GettyImages-1060490970-dcac66d9cda841638d49bc10f5dc1a8b.webp');
-      }
-
-      if(msg.content.includes("!phonebook")){
-        msg.channel.send({ embeds: [phonebook] });
-      }
-
-      if(msg.content.includes("!help")){
-        msg.channel.send({ embeds: [helpMenu] });
-      }
-
-      if(msg.content.includes("!ls")||msg.content.includes("!list")){
-        msg.channel.send({ embeds: [cheatsheet] });
-      }
-
-      if(msg.content.includes("!snow")){
-        var args = msg.content.substring(6+msg.content.indexOf("!snow"));
-        msg.channel.send('https://support.ucsd.edu/nav_to.do?uri=task.do?sysparm_query=number=' + args);
-      }
-	  
-	  if(msg.content.includes("!kb")){
-        var args = msg.content.substring(4+msg.content.indexOf("!kb"));
-		var argsURL = encodeURI(args);
-		const kbResults = new Discord.EmbedBuilder().setDescription('[Knowledge Base Search Results for ' + args + '](https://support.ucsd.edu/its?id=search&spa=1&q=' + argsURL + ")");
-		msg.channel.send({embeds: [kbResults]});
-      }
-	  
-	  if(msg.content.includes("!collab")){
-        var args = msg.content.substring(8+msg.content.indexOf("!collab"));
-		var argsPlus = args.split(' ').join('+');;
-		const collabResults = new Discord.EmbedBuilder().setDescription('[Collab Search Results for ' + args + '](https://collab.ucsd.edu/dosearchsite.action?cql=siteSearch+~+%22' + argsPlus +'%22+and+space+%3D+%22CKB%22)');
-		msg.channel.send({embeds: [collabResults]});
-      }
-	  
-	  if(msg.content.includes("!p ")){
-        var args = msg.content.substring(3+msg.content.indexOf("!p "));
-		    if(args.indexOf(" ") >= 0){
-			    var args = args.substring(0,args.indexOf(" "));
-		    }
-		    const mailupdResults = new Discord.EmbedBuilder().setDescription('[MailUPD page for ' + args + '](https://mailupd.ucsd.edu/view?id=' + args + ')');
-		    msg.channel.send({embeds: [mailupdResults]});
+    if(msg.content.includes("!ping")){
+      msg.channel.send('pong');
     }
 	  
-	  /*if(msg.content.includes("!sneaky")){
-        var args = msg.content.substring(8+msg.content.indexOf("!sneaky"));
-        client.channels.get("759488585803759666").send(args)
-      }*/
-      //#endregion
+    if(msg.content.includes("!ding")){
+      msg.channel.send('dong');
+    }
+	  
+    if(msg.content.includes("!aloha")){
+      msg.channel.send('World class customer service!');
+    }
+
+    if(msg.content.includes("!sleep")){
+      msg.channel.send('go to bed',{
+        tts: true
+      });
+    }
+
+    if(msg.content.includes("!sammy")){
+      msg.channel.send('sigh');
+    }
+
+    if(msg.content.includes("!loudsammy")){
+      msg.channel.send('sigh',{
+        tts: true
+      });
+    }
+
+    //BOB FIRED
+    if(msg.content.includes("!fired")){
+		  if(msg.author.id == "718538581421064232"){
+			  msg.delete();
+			  msg.channel.send('<@718538581421064232> FIRED'); //Ari firing
+		  } 
+      else{
+      //0-10     Aedan                 Kevin                Ivan                 Mingson              Jeremy               Bryce                Kelly                Tae                  Vincent
+      IDArray = ['299020647198228480','419970850519777280','283414458590822401','266023244539232257','298696268920913924','147954160526950411','718326776165826580','687482247955218483','136447120658923520',
+      //Rolando            Lola
+      '96402723435446272','472305444518494208'];
+      toFire = getRandomInt(0,10);
+      msg.channel.send(`<@${IDArray[toFire]}> Fired`);
+		  }
+    }
+    
+
+    //nice one
+    if(msg.content.toLowerCase().includes("!cscs")){
+      msg.channel.send('delete the extra cs!');
+    }
+
+      
+    //Sammy GIF
+    if(msg.content.includes("!hyper")){
+      msg.channel.send('https://cdn.discordapp.com/attachments/765777043639762948/775841239878074388/sammy.gif');
+    }
+      
+    //BIRD
+    if(msg.content.includes("!parrot")){
+      msg.channel.send('https://media.discordapp.net/attachments/765777043639762948/784559806630330398/bird.gif');
+    }
+
+    //TOAD
+    if(msg.content.includes("!toad")){
+      msg.channel.send('https://cdn.discordapp.com/attachments/765777043639762948/784565365949857842/toad.gif');
+    }
+
+    //#endregion
+
+    //Useful Stuff
+    //#region 
+    //FS
+    if (msg.content.includes("!fs")||msg.content.includes('!fieldsupport')){
+      msg.channel.send('https://cdn.discordapp.com/attachments/765777043639762948/784567793047699496/fs-map.png');
+    }
+	  
+	  if (msg.content.toLowerCase().includes("!nato")){
+      msg.channel.send('https://media.discordapp.net/attachments/765777043639762948/886307401106604123/GettyImages-1060490970-dcac66d9cda841638d49bc10f5dc1a8b.webp');
+    }
+
+    if(msg.content.includes("!phonebook")){
+      msg.channel.send({ embeds: [phonebook] });
+    }
+
+    if(msg.content.includes("!help")){
+      msg.channel.send({ embeds: [helpMenu] });
+    }
+
+    if(msg.content.includes("!ls")||msg.content.includes("!list")){
+      msg.channel.send({ embeds: [cheatsheet] });
+    }
+
+    if(msg.content.includes("!snow")){
+      var args = msg.content.substring(6+msg.content.indexOf("!snow"));
+      msg.channel.send('https://support.ucsd.edu/nav_to.do?uri=task.do?sysparm_query=number=' + args);
+    }
+	  
+	  if(msg.content.includes("!kb")){
+      var args = msg.content.substring(4+msg.content.indexOf("!kb"));
+		  var argsURL = encodeURI(args);
+		  const kbResults = new Discord.EmbedBuilder().setDescription('[Knowledge Base Search Results for ' + args + '](https://support.ucsd.edu/its?id=search&spa=1&q=' + argsURL + ")");
+		  msg.channel.send({embeds: [kbResults]});
+    }
+	  
+	  if(msg.content.includes("!collab")){
+      var args = msg.content.substring(8+msg.content.indexOf("!collab"));
+		  var argsPlus = args.split(' ').join('+');;
+		  const collabResults = new Discord.EmbedBuilder().setDescription('[Collab Search Results for ' + args + '](https://collab.ucsd.edu/dosearchsite.action?cql=siteSearch+~+%22' + argsPlus +'%22+and+space+%3D+%22CKB%22)');
+		  msg.channel.send({embeds: [collabResults]});
+    }
+	  
+	  if(msg.content.includes("!p ")){
+      var args = msg.content.substring(3+msg.content.indexOf("!p "));
+		  if(args.indexOf(" ") >= 0){
+			  var args = args.substring(0,args.indexOf(" "));
+		  }
+		  const mailupdResults = new Discord.EmbedBuilder().setDescription('[MailUPD page for ' + args + '](https://mailupd.ucsd.edu/view?id=' + args + ')');
+		  msg.channel.send({embeds: [mailupdResults]});
+    }
   }
 
   //NON CUSTOM EMOTE SECTION
@@ -217,57 +175,61 @@ client.on('messageCreate', msg => {
 
 
     //Jim
-    if(msg.content.includes(":bandanadee:")){
+    else if(msg.content.includes(":bandanadee:")){
       msg.channel.send("<@!354474386213830656>");
     }
 
     //Robyn
-    if(msg.content.includes(":partyrobyn:")){
+    else if(msg.content.includes(":partyrobyn:")){
       msg.channel.send("<@880110499512061964>");
     }
 	
 	  //Ivan
-    if(msg.content.includes(":concern:")){
+    else if(msg.content.includes(":concern:")){
       msg.channel.send("<@283414458590822401>");
     }
 	
 	  //Steven
-    if(msg.content.includes(":orang:")){
+    else if(msg.content.includes(":orang:")){
       msg.channel.send("<@138143243559895040>");
     }
 	
 	
 	  //Rolando
-    if(msg.content.includes(":AAA:")){
+    else if(msg.content.includes(":AAA:")){
       msg.channel.send("<@96402723435446272>");
     }	
 	  
   
     //Aedan
-    if(msg.content.includes(":ThatDawg:")){
+    else if(msg.content.includes(":ThatDawg:")){
       msg.channel.send("<@299020647198228480>");
     }
 
     //Dylan
-    if(msg.content.includes(":fingergunsleft:")){
+    else if(msg.content.includes(":fingergunsleft:")){
       msg.channel.send("<@339622598407225354>")
     }
 
     //Ariana
-    if(msg.content.includes(":dabariana:")){
+    else if(msg.content.includes(":dabariana:")){
       msg.channel.send("<@498262016973078549>")
     }
 
     //Kevin
-    if(msg.content.includes(":laoo:")){
+    else if(msg.content.includes(":laoo:")){
       msg.channel.send("<@419970850519777280>")
     }
 
     //Tae
-    if(msg.content.includes(":bumis:")){
+    else if(msg.content.includes(":bumis:")){
       msg.channel.send("<@687482247955218483>")
     }
 
+    //Vincent
+    else if(msg.content.includes(":bang:")){
+      msg.channel.send("<@136447120658923520>")
+    }
     //#endregion
   }
 
