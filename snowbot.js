@@ -13,6 +13,7 @@ const { token } = require('./config.json');
 client.login(token);
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
+  console.log(`Watching ${client.users.cache.size} users!`)
 });
 
 
@@ -72,11 +73,13 @@ client.on('messageCreate', msg => {
       else
       {
         //0-10        Aedan               Kevin              Ivan               Mingson            Jeremy             Bryce              Kelly              Tae               Vincent
-        IDArray = [299020647198228480,419970850519777280,283414458590822401,266023244539232257,298696268920913924,147954160526950411,718326776165826580,687482247955218483,136447120658923520,
+        //IDArray = [299020647198228480,419970850519777280,283414458590822401,266023244539232257,298696268920913924,147954160526950411,718326776165826580,687482247955218483,136447120658923520,
         //Rolando         Lola
-        96402723435446272,472305444518494208];
-        toFire = getRandomInt(0,10);
-        msg.channel.send(`<@${IDArray[toFire]}> Fired`);
+        //96402723435446272,472305444518494208];
+        JustMe = [299020647198228480]
+        msg.channel.send(`<@${JustMe[0]}> Fired`)
+        //toFire = getRandomInt(0,10);
+        //msg.channel.send(`<@${IDArray[toFire]}> Fired`);
 			  /*switch(getRandomInt(0,9)) { //0-5 gives 6 options, current number of leads
 				  case 0:
 					  msg.channel.send('<@299020647198228480> FIRED'); //Aedan
