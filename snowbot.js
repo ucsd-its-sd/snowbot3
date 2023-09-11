@@ -76,7 +76,7 @@ client.on('messageCreate', msg => {
         //Rolando         Lola
         96402723435446272,472305444518494208];
         toFire = getRandomInt(0,10);
-        msg.channel.send('<@'+ IDArray[toFire] + '> Fired');
+        msg.channel.send(`<@${IDArray[toFire]}> Fired`);
 			  /*switch(getRandomInt(0,9)) { //0-5 gives 6 options, current number of leads
 				  case 0:
 					  msg.channel.send('<@299020647198228480> FIRED'); //Aedan
