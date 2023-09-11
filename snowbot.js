@@ -65,30 +65,38 @@ client.on('messageCreate', msg => {
 
       //BOB FIRED
       if(msg.content.includes("!fired")){
-		if(msg.author.id == "718538581421064232"){
-			msg.delete();
-			//msg.channel.send('<@718538581421064232> FIRED'); //Ari firing
-		}else{
-			switch(getRandomInt(0,9)) { //0-5 gives 6 options, current number of leads
-				case 0:
-					msg.channel.send('<@299020647198228480> FIRED'); //Aedan
-					break;
-				case 1:
-					msg.channel.send('<@419970850519777280> FIRED'); //Kevin
-					break;
-				case 2:
-					msg.channel.send('<@283414458590822401> FIRED'); //Ivan
-					break;
-				case 3:
-					msg.channel.send('<@266023244539232257> FIRED'); //Mingson
-					break;
-				case 4:
-					msg.channel.send('<@298696268920913924> FIRED'); //Jeremy
-					break;
-				case 5:
-					msg.channel.send('<@147954160526950411> FIRED'); //Bryce
-					break;
-				case 6:
+		    if(msg.author.id == "718538581421064232"){
+			  msg.delete();
+			  msg.channel.send('<@718538581421064232> FIRED'); //Ari firing
+		    } 
+      else
+      {
+        //0-10        Aedan               Kevin              Ivan               Mingson            Jeremy             Bryce              Kelly              Tae               Vincent
+        IDArray = [299020647198228480,419970850519777280,283414458590822401,266023244539232257,298696268920913924,147954160526950411,718326776165826580,687482247955218483,136447120658923520,
+        //Rolando         Lola
+        96402723435446272,472305444518494208];
+        toFire = getRandomInt(0,10);
+        msg.channel.send('<@'+ IDArray[toFire] + '> Fired');
+			  /*switch(getRandomInt(0,9)) { //0-5 gives 6 options, current number of leads
+				  case 0:
+					  msg.channel.send('<@299020647198228480> FIRED'); //Aedan
+					  break;
+				  case 1:
+					  msg.channel.send('<@419970850519777280> FIRED'); //Kevin
+					  break;
+				  case 2:
+					  msg.channel.send('<@283414458590822401> FIRED'); //Ivan
+					  break;
+				  case 3:
+					  msg.channel.send('<@266023244539232257> FIRED'); //Mingson
+					  break;
+				  case 4:
+					  msg.channel.send('<@298696268920913924> FIRED'); //Jeremy
+					  break;
+				  case 5:
+					  msg.channel.send('<@147954160526950411> FIRED'); //Bryce
+					  break;
+				  case 6:
 					msg.channel.send('<@718326776165826580> FIRED'); //Kelly
 					break;
 				case 7:
@@ -103,7 +111,7 @@ client.on('messageCreate', msg => {
 				default: 
 					msg.channel.send('<@472305444518494208> FIRED'); //Lola Default
 					break;
-			}
+			}*/
 		}
         //msg.channel.send('<@!125813294773698561> FIRED');
       }
