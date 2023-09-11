@@ -231,8 +231,23 @@ client.on('messageCreate', msg => {
     }
   
   //Aedan
-    if(msg.content.includes(":kermlove:"))
-    msg.channel.send("<@299020647198228480>")
+    if(msg.content.includes(":ThatDawg:")){
+      msg.channel.send("<@299020647198228480>");
+    }
+
+    //Dylan
+    if(msg.content.includes(":fingergunsleft:")){
+      msg.channel.send("<@339622598407225354>")
+    }
+
+    //Arianna
+    if(msg.content.includes(":dabariana:")){
+      msg.channel.send("<@498262016973078549>")
+    }
+
+    if(msg.content.includes(":laoo:")){
+      msg.channel.send("<@419970850519777280>")
+    }
 
     //#endregion
   }
@@ -250,6 +265,13 @@ client.on('messageCreate', msg => {
 			msg.channel.send('https://cdn.discordapp.com/attachments/765777043639762948/788513996763693076/elmo.gif');
 		}
     }
+
+  //Party Robyn Gif
+  /*if(msg.content.includes("<@!690663566239596615>")){
+    if(getRandomInt(1,100) <= 100){
+      msg.channel.send('')
+    }
+  }*/
 	
 	//man u guys really like your puppets dont you
 
@@ -340,8 +362,7 @@ const phonebook = new Discord.EmbedBuilder()
 .setTitle('Phonebook')
 .setThumbnail('https://cdn.discordapp.com/attachments/765777043639762948/787101249764851742/e39ec5942bc69d0a6392f507ff3321ed.png')
 .addFields({
-    // name: "<:snorlax:784554135420272640>",
-    name: "<:snorlax:>",
+    name: "<:snorlax:784554135420272640>",
     value: "snorlax dials Jenny"
 },{
     name: "<:bandanadee:785003854857109524>",
@@ -356,12 +377,21 @@ const phonebook = new Discord.EmbedBuilder()
     name: "<:orang:1007509643762868314>",
     value: "orang dials Steven"
 },{
-    name: "<🦧>",
-    value: "🦧 dials Mingson"
+    name: "<:orangutan:266023244539232257>",
+    value: "orangutan dials Mingson"
+},{
+    name: "<:ThatDawg:299020647198228480>",
+    value: "ThatDawg dials Aedan"
+},{
+    name: "<:fingergunsleft:339622598407225354>",
+    value: "fingergunsleft dials Dylan"
+},{
+    name: "<:laoo:419970850519777280>",
+    value: "laoo dials Kevin"
 },{
     name: "@Steve",
     value: "@Steve dials Kermit 30% of the time."
 },{
     name: "@Jenny",
     value: "@Jenny dials Flame Elmo 17% of the time"
-});
+},);
