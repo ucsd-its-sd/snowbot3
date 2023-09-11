@@ -196,6 +196,7 @@ client.on('messageCreate', msg => {
     msg.channel.send("<@266023244539232257>");
   }
 
+  //includes : needed for customer emotes
   if(msg.content.includes(":")){
     //custom emoji commands collapsed here
     //#region 
@@ -248,8 +249,14 @@ client.on('messageCreate', msg => {
       msg.channel.send("<@498262016973078549>")
     }
 
+    //Kevin
     if(msg.content.includes(":laoo:")){
       msg.channel.send("<@419970850519777280>")
+    }
+
+    //Tae
+    if(msg.content.includes(":bumis:")){
+      msg.channel.send("<@687482247955218483>")
     }
 
     //#endregion
@@ -393,9 +400,15 @@ const phonebook = new Discord.EmbedBuilder()
     name: "<:laoo:1088529626105647114>",
     value: "laoo dials Kevin"
 },{
+    name : "<:bumis:916554784625025116>",
+    value: "bumis dials Tae"
+},{
     name: "@Steve",
     value: "@Steve dials Kermit 30% of the time."
 },{
     name: "@Jenny",
     value: "@Jenny dials Flame Elmo 17% of the time"
-},);
+},{
+    name: "@Robyn",
+    value: "@Robyn dials Party Robyn 22% of the time"
+});
