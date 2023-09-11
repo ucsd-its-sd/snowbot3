@@ -259,11 +259,12 @@ client.on('messageCreate', msg => {
 		}
   }
 	
+  console.log(msg.content)
 	//Jenny Elmo GIF
 	if(msg.content.includes("<@!491450429679468565>")){
-		if(true){ 
+		//if(true){ 
 			msg.channel.send('https://cdn.discordapp.com/attachments/765777043639762948/788513996763693076/elmo.gif');
-		}
+    //}
   }
 
   //Party Robyn Gif
