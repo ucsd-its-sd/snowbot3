@@ -189,6 +189,13 @@ client.on('messageCreate', msg => {
       //#endregion
   }
 
+  //NON CUSTOM EMOTE SECTION
+
+  //Mingson
+  if(msg.content.includes(":orangutan:") || msg.content.includes("🦧")){
+    msg.channel.send("<@266023244539232257>");
+  }
+
   if(msg.content.includes(":")){
     //custom emoji commands collapsed here
     //#region 
@@ -223,14 +230,8 @@ client.on('messageCreate', msg => {
 	  //Rolando
     if(msg.content.includes(":AAA:")){
       msg.channel.send("<@96402723435446272>");
-    }
-
-    console.log(msg.content, msg.content.codePointAt(0));
-	
-	  //Mingson
-    if(msg.content.includes(":orangutan:") || msg.content.includes("🦧")){
-      msg.channel.send("<@266023244539232257>");
-    }
+    }	
+	  
   
     //Aedan
     if(msg.content.includes(":ThatDawg:")){
