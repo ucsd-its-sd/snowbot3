@@ -224,9 +224,11 @@ client.on('messageCreate', msg => {
     if(msg.content.includes(":AAA:")){
       msg.channel.send("<@96402723435446272>");
     }
+
+    console.log(msg.content, msg.content.codePointAt(0));
 	
 	  //Mingson
-    if(msg.content.includes(":orangutan:")||msg.content.includes("🦧")){
+    if(msg.content.includes(":orangutan:") || msg.content.includes("🦧")){
       msg.channel.send("<@266023244539232257>");
     }
   
@@ -269,7 +271,7 @@ client.on('messageCreate', msg => {
 
   //Party Robyn Gif
   if(msg.content.includes("<@690663566239596615>")){
-    if(true){
+    if(getRandomInt(1,100) <= 22){
       msg.channel.send('https://cdn.discordapp.com/attachments/787254252077580289/1149162996342468608/partyoiseaur.gif')
     }
   }
