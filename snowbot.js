@@ -25,7 +25,7 @@ client.on('messageCreate', msg => {
   //Rolando            Lola
   '96402723435446272','472305444518494208'];
 
-  const RecentFires = [];
+  var RecentFires = [];
   
   var index = msg.content.toLowerCase().indexOf("!cs");
   if (index >= 0 && !isNaN(msg.content.substring(3+index,10+index))){
