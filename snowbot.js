@@ -83,18 +83,18 @@ const leadCarrerDict = [{
     EmoteN: ":theclawww:",
     EmoteID: '<:theclawww:787259808326615060>',
     ID: '97838330716094464'
-  }]
+  }];
 
   //Kelly and Bryce Don't have emotes yet
 
 
 var phoneList = [];
 for(var i = 0; i < leadCarrerDict.length; i++){
-  phoneList.push({name: leadCarrerDict[i][Emotes], value: "Dials" + leadCarrerDict[i][Name]})
+  phoneList.push({name: leadCarrerDict[i][Emotes], value: "Dials" + leadCarrerDict[i][Name]});
 }
-phoneList.push({name: "@Steve",value: "@Steve dials Kermit 30% of the time."}),
-phoneList.push({name: "@Jenny",value: "@Jenny dials Flame Elmo 17% of the time"})
-phoneList.push({name: "@Robyn",value: "@Robyn dials Party Robyn 22% of the time"})
+phoneList.push({name: "@Steve",value: "@Steve dials Kermit 30% of the time."});
+phoneList.push({name: "@Jenny",value: "@Jenny dials Flame Elmo 17% of the time"});
+phoneList.push({name: "@Robyn",value: "@Robyn dials Party Robyn 22% of the time"});
 
 //0-10            Aedan                 Kevin                Ivan                 Mingson              Jeremy               Bryce                Kelly                Tae                  Vincent
 const IDArray = ['299020647198228480','419970850519777280','283414458590822401','266023244539232257','298696268920913924','147954160526950411','718326776165826580','687482247955218483','136447120658923520',
