@@ -95,7 +95,7 @@ client.on('messageCreate', msg => {
       else{
         toHire = RecentFires.pop();
         console.log(toHire);
-        msg.channel.send(`<@${IDArray[toHire]}> has been hired! All your shifts start at 6:45AM`);
+        msg.channel.send(`<@${toHire}> has been hired! All your shifts start at 6:45AM`);
       }
     }
 
