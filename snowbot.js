@@ -19,6 +19,13 @@ client.on('ready', () => {
 
 // Actually do stuff.
 client.on('messageCreate', msg => {
+
+  //0-10     Aedan                 Kevin                Ivan                 Mingson              Jeremy               Bryce                Kelly                Tae                  Vincent
+  const IDArray = ['299020647198228480','419970850519777280','283414458590822401','266023244539232257','298696268920913924','147954160526950411','718326776165826580','687482247955218483','136447120658923520',
+  //Rolando            Lola
+  '96402723435446272','472305444518494208'];
+
+  const RecentFires = []
   
   var index = msg.content.toLowerCase().indexOf("!cs");
   if (index >= 0 && !isNaN(msg.content.substring(3+index,10+index))){
@@ -71,15 +78,24 @@ client.on('messageCreate', msg => {
 			  msg.channel.send('<@718538581421064232> FIRED'); //Ari firing
 		  } 
       else{
-      //0-10     Aedan                 Kevin                Ivan                 Mingson              Jeremy               Bryce                Kelly                Tae                  Vincent
-      IDArray = ['299020647198228480','419970850519777280','283414458590822401','266023244539232257','298696268920913924','147954160526950411','718326776165826580','687482247955218483','136447120658923520',
-      //Rolando            Lola
-      '96402723435446272','472305444518494208'];
       toFire = getRandomInt(0,10);
       msg.channel.send(`<@${IDArray[toFire]}> Fired`);
+      RecentFires.push(IDArray[toFire])
 		  }
     }
     
+    if(msg.content.includes("!hired")){
+      if(RecentFires.length = 0){
+        toHire = getRandomInt(0,10);
+        msg.channel.send(`<@${IDArray[toHire]}> Fired!`)
+        msg.channel.send(`<@${IDArray[toHire]}> And Rehired!`);
+      }
+      //Pull from recent fired
+      else{
+        toHire = RecentFires.pop()
+        msg.channel.send(`<@${IDArray[toHire]}> has been hired! All your shifts start at 6:45AM`)
+      }
+    }
 
     //nice one
     if(msg.content.toLowerCase().includes("!cscs")){
@@ -154,13 +170,6 @@ client.on('messageCreate', msg => {
 		  const mailupdResults = new Discord.EmbedBuilder().setDescription('[MailUPD page for ' + args + '](https://mailupd.ucsd.edu/view?id=' + args + ')');
 		  msg.channel.send({embeds: [mailupdResults]});
     }
-  }
-
-  //NON CUSTOM EMOTE SECTION
-
-  //Mingson
-  if(msg.content.includes(":orangutan:") || msg.content.includes("🦧")){
-    msg.channel.send("<@266023244539232257>");
   }
 
   //includes : needed for customer emotes
@@ -254,9 +263,13 @@ client.on('messageCreate', msg => {
       msg.channel.send('https://cdn.discordapp.com/attachments/787254252077580289/1149162996342468608/partyoiseaur.gif')
     }
   }
-	
-	//man u guys really like your puppets dont you
 
+  //NON CUSTOM EMOTE SECTION
+
+  //Mingson
+  if(msg.content.includes("🦧")){
+    msg.channel.send("<@266023244539232257>");
+  }
 
   if(msg.content.includes("☎️")){
     msg.channel.send({ embeds: [phonebook] });
@@ -265,12 +278,6 @@ client.on('messageCreate', msg => {
   if(msg.content.toLowerCase().includes("fuck")|msg.content.toLowerCase().includes("shit")|msg.content.toLowerCase().includes(" ass ")|msg.content.toLowerCase().includes(" assh")|msg.content.toLowerCase().includes("dumbass")|msg.content.toLowerCase().includes("bastard")){
     msg.channel.send("LANGUAGE");
   }
-	
-	/*if(msg.author.id == "161166847817809920"){
-		if(msg.content.toLowerCase().includes("help")){
-			msg.channel.send("https://cdn.discordapp.com/attachments/765777043639762948/796254877596516352/unknown.png");
-		}		
-	}*/ //commenting out aaron's thing
 	
 });
 
