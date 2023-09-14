@@ -16,6 +16,85 @@ client.on('ready', () => {
   console.log(`Watching ${client.users.cache.size} users!`)
 });
 
+//A collection of leads, discord IDs, and emotes associated
+//Might wanna split to have emote ID
+const leadCarrerDict = [{
+    Name: "Aedan",
+    EmoteN: ":ThatDawg:",
+    EmoteID: "<:ThatDawg:1150857342968152211>",
+    ID: '299020647198228480'
+  },{
+    Name: "Kevin",
+    EmoteN: ":laoo:",
+    EmoteID: '<:laoo:1088529626105647114>',
+    ID: '419970850519777280'
+  },{
+    Name: "Ivan",
+    EmoteN: ":concern:",
+    EmoteID: '<:concern:1017133018390995005>',
+    ID: '283414458590822401'
+  },{
+    Name: "Mingson",
+    EmoteN: "🦧",
+    EmoteID: '<:orangutan:266023244539232257>',
+    ID: '266023244539232257'
+  },{
+    Name: "Bryce",
+    EmoteN: ":patcase:",
+    EmoteID: '<:patface:1151963202633093141>',
+    ID: '147954160526950411'
+  },{
+    Name: "Kelly",
+    EmoteN: ":petergasp:",
+    EmoteID: '<:petergasp:1151961777756700773>',
+    ID: '718326776165826580'
+  },{
+    Name: "Tae",
+    EmoteN: ":bumis:",
+    EmoteID: '<:bumis:916554784625025116>',
+    ID: '687482247955218483'
+  },{
+    Name: "Vincent",
+    EmoteN: ":bang:",
+    EmoteID: '<:bang:1088606779748913292>',
+    ID: '136447120658923520'
+  },{
+    Name: "Rolando",
+    EmoteN: ":AAA:",
+    EmoteID: '<:AAA:1035307742715461642>',
+    ID: '96402723435446272'
+  },{
+    Name: "Lola",
+    EmoteN: ":letsgoooooooooooooo:",
+    EmoteID: '<:letsgoooooooooooooo:1151972456488259674>',
+    ID: '472305444518494208'
+  },{
+    Name: "Robyn",
+    EmoteN: ":partyrobyn:",
+    EmoteID: '<:partyrobyn:1017136291374174311>',
+    ID: '880110499512061964'
+  },{
+    Name: "Jenny",
+    EmoteN: ":snorlax",
+    EmoteID: '<:snorlax:784554135420272640>',
+    ID: '491450429679468565'
+  },{
+    Name: "Steve",
+    EmoteN: ":theclawww:",
+    EmoteID: '<:theclawww:787259808326615060>',
+    ID: '97838330716094464'
+  }]
+
+  //Kelly and Bryce Don't have emotes yet
+
+
+var phoneList = [];
+for(var i = 0; i < leadCarrerDict.length; i++){
+  phoneList.push({name: leadCarrerDict[i][Emotes], value: "Dials" + leadCarrerDict[i][Name]})
+}
+phoneList.push({name: "@Steve",value: "@Steve dials Kermit 30% of the time."}),
+phoneList.push({name: "@Jenny",value: "@Jenny dials Flame Elmo 17% of the time"})
+phoneList.push({name: "@Robyn",value: "@Robyn dials Party Robyn 22% of the time"})
 
 //0-10            Aedan                 Kevin                Ivan                 Mingson              Jeremy               Bryce                Kelly                Tae                  Vincent
 const IDArray = ['299020647198228480','419970850519777280','283414458590822401','266023244539232257','298696268920913924','147954160526950411','718326776165826580','687482247955218483','136447120658923520',
@@ -93,7 +172,8 @@ client.on('messageCreate', msg => {
       }
       //Pull from recent fired
       else{
-        toHire = RecentFires.pop();
+        //Moves RecentFires one to the left and saves the removed first element
+        toHire = RecentFires.shift();
         console.log(toHire);
         msg.channel.send(`<@${toHire}> has been hired! All your shifts start at 6:45AM`);
       }
@@ -176,7 +256,13 @@ client.on('messageCreate', msg => {
 
   //includes : needed for customer emotes
   if(msg.content.includes(":")){
-    //custom emoji commands collapsed here
+    for(var i = 0; i < leadCarrerDict.length; i++){
+      if(msg.content.includes(leadCarrerDict[i][EmoteN])){
+        msg.channel.send(`<@${leadCarrerDict[i][ID]}>`);
+        break;
+      }
+    }
+    /*//custom emoji commands collapsed here
     //#region 
 
     //Jenny
@@ -241,7 +327,7 @@ client.on('messageCreate', msg => {
     else if(msg.content.includes(":bang:")){
       msg.channel.send("<@136447120658923520>")
     }
-    //#endregion
+    //#endregion*/
   }
 
 	//Steve Kermit GIF
@@ -352,7 +438,10 @@ const phonebook = new Discord.EmbedBuilder()
 .setColor(0x442691)
 .setTitle('Phonebook')
 .setThumbnail('https://cdn.discordapp.com/attachments/765777043639762948/787101249764851742/e39ec5942bc69d0a6392f507ff3321ed.png')
-.addFields({
+//... expands a list into arguments
+.addFields(...phoneList)
+
+/*.addFields({
     name: "<:snorlax:784554135420272640>",
     value: "snorlax dials Jenny"
 },{
@@ -397,4 +486,4 @@ const phonebook = new Discord.EmbedBuilder()
 },{
     name: "@Robyn",
     value: "@Robyn dials Party Robyn 22% of the time"
-});
+});*/
