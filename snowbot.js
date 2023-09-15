@@ -19,6 +19,12 @@ client.on('ready', () => {
 //A collection of leads, discord IDs, and emotes associated
 //Might wanna split to have emote ID
 const leadCarrerDict = [{
+    Name: "Steven",
+    EmoteN: ":orang:",
+    EmoteID: ':orang:1007509643762868314',
+    ID: '138143243559895040'
+  },
+  {
     Name: "Aedan",
     EmoteN: ":ThatDawg:",
     EmoteID: "<:ThatDawg:1150857342968152211>",
@@ -40,7 +46,7 @@ const leadCarrerDict = [{
     ID: '266023244539232257'
   },{
     Name: "Bryce",
-    EmoteN: ":patcase:",
+    EmoteN: ":patface:",
     EmoteID: '<:patface:1151963202633093141>',
     ID: '147954160526950411'
   },{
@@ -97,11 +103,16 @@ phoneList.push({name: "@Jenny",value: "@Jenny dials Flame Elmo 17% of the time"}
 phoneList.push({name: "@Robyn",value: "@Robyn dials Party Robyn 22% of the time"});
 
 //0-10            Aedan                 Kevin                Ivan                 Mingson              Jeremy               Bryce                Kelly                Tae                  Vincent
-const IDArray = ['299020647198228480','419970850519777280','283414458590822401','266023244539232257','298696268920913924','147954160526950411','718326776165826580','687482247955218483','136447120658923520',
+/*const IDArray = ['299020647198228480','419970850519777280','283414458590822401','266023244539232257','298696268920913924','147954160526950411','718326776165826580','687482247955218483','136447120658923520',
 //Rolando            Lola
-'96402723435446272','472305444518494208'];
+'96402723435446272','472305444518494208'];*/
 
 var RecentFires = [];
+
+const hireJokes = [' is still gonna be fired actually.', ' has been rehired! All your shifts start at 6:45am.', ' Welcome back! We have a thunderbird user on the line for you.', 
+' nice to see you! Can you take a look at this ticket? It\'s been bouncing between us and health for weeks.', ' You\'re back! There\'s someone asking for you specifically, they seem upset.',
+' Aloha! You have been selected to test our new 12am-6am graveyard shift',' has been moved to the People OU for transfer to Health IS', ' has been sent to our new Texas office for the next three years', 
+' is now head of FS North',]
 
 // Actually do stuff.
 client.on('messageCreate', msg => {
@@ -175,7 +186,8 @@ client.on('messageCreate', msg => {
         //Moves RecentFires one to the left and saves the removed first element
         toHire = RecentFires.shift();
         console.log(toHire);
-        msg.channel.send(`<@${toHire}> has been hired! All your shifts start at 6:45AM`);
+        hireMessage = getRandomInt(0, (hireJokes.length - 1))
+        msg.channel.send(`<@${toHire}>`+ hireJokes[hireMessage]);
       }
     }
 
@@ -254,7 +266,7 @@ client.on('messageCreate', msg => {
     }
   }
 
-  //includes : needed for customer emotes
+  //includes : needed for custom emotes
   if(msg.content.includes(":")){
     for(var i = 0; i < leadCarrerDict.length; i++){
       if(msg.content.includes(leadCarrerDict[i][EmoteN])){
