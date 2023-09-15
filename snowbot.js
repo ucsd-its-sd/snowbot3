@@ -96,7 +96,7 @@ const leadCarrerDict = [{
 
 var phoneList = [];
 for(var i = 0; i < leadCarrerDict.length; i++){
-  phoneList.push({name: leadCarrerDict[i][Emotes], value: "Dials" + leadCarrerDict[i][Name]});
+  phoneList.push({name: leadCarrerDict[i]["EmoteN"], value: " Dials " + leadCarrerDict[i]["Name"]});
 }
 phoneList.push({name: "@Steve",value: "@Steve dials Kermit 30% of the time."});
 phoneList.push({name: "@Jenny",value: "@Jenny dials Flame Elmo 17% of the time"});
@@ -269,8 +269,8 @@ client.on('messageCreate', msg => {
   //includes : needed for custom emotes
   if(msg.content.includes(":")){
     for(var i = 0; i < leadCarrerDict.length; i++){
-      if(msg.content.includes(leadCarrerDict[i][EmoteN])){
-        msg.channel.send(`<@${leadCarrerDict[i][ID]}>`);
+      if(msg.content.includes(leadCarrerDict[i]["EmoteN"])){
+        msg.channel.send(`<@${leadCarrerDict[i]["ID"]}>`);
         break;
       }
     }
