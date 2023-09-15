@@ -96,7 +96,7 @@ const leadCarrerDict = [{
 
 var phoneList = [];
 for(var i = 0; i < leadCarrerDict.length; i++){
-  phoneList.push({name: leadCarrerDict[i]["EmoteN"], value: " Dials " + leadCarrerDict[i]["Name"]});
+  phoneList.push({name: leadCarrerDict[i].EmoteN, value: leadCarrerDict[i].EmoteN + " dials " + leadCarrerDict[i].Name});
 }
 phoneList.push({name: "@Steve",value: "@Steve dials Kermit 30% of the time."});
 phoneList.push({name: "@Jenny",value: "@Jenny dials Flame Elmo 17% of the time"});
@@ -112,7 +112,7 @@ var RecentFires = [];
 const hireJokes = [' is still gonna be fired actually.', ' has been rehired! All your shifts start at 6:45am.', ' Welcome back! We have a thunderbird user on the line for you.', 
 ' nice to see you! Can you take a look at this ticket? It\'s been bouncing between us and health for weeks.', ' You\'re back! There\'s someone asking for you specifically, they seem upset.',
 ' Aloha! You have been selected to test our new 12am-6am graveyard shift',' has been moved to the People OU for transfer to Health IS', ' has been sent to our new Texas office for the next three years', 
-' is now head of FS North',]
+' is now head of FS North']
 
 // Actually do stuff.
 client.on('messageCreate', msg => {
