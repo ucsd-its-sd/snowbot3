@@ -39,11 +39,6 @@ const leadCarrerDict = [{
     EmoteID: '<:concern:1017133018390995005>',
     ID: '283414458590822401'
   },{
-    Name: "Mingson",
-    EmoteN: "🦧",
-    EmoteID: '<:orangutan:266023244539232257>',
-    ID: '266023244539232257'
-  },{
     Name: "Bryce",
     EmoteN: ":patface:",
     EmoteID: '<:patface:1151963202633093141>',
