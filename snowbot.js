@@ -294,12 +294,6 @@ client.on('messageCreate', msg => {
   }
 
   //NON CUSTOM EMOTE SECTION
-
-  //Mingson
-  if(msg.content.includes("🦧")){
-    msg.channel.send("<@266023244539232257>");
-  }
-
   if(msg.content.includes("☎️")){
     msg.channel.send({ embeds: [phonebook] });
   }
