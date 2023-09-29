@@ -13,7 +13,7 @@ const { token } = require('./config.json');
 client.login(token);
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  console.log(`Watching ${client.users.cache.size} users!`)
+  //console.log(`Watching ${client.users.cache.size} users!`)
 });
 
 //A collection of leads, discord IDs, and emotes associated
@@ -90,9 +90,7 @@ const leadCarrerDict = [{
     ID: '97838330716094464'
   }];
 
-  //Kelly and Bryce Don't have emotes yet
-
-
+//Creation of the phonebookList to embed
 var phoneList = [];
 for(var i = 0; i < leadCarrerDict.length; i++){
   phoneList.push({name: leadCarrerDict[i].EmoteID, value: leadCarrerDict[i].EmoteN + " dials " + leadCarrerDict[i].Name});
@@ -101,13 +99,10 @@ phoneList.push({name: "@Steve",value: "@Steve dials Kermit 30% of the time."});
 phoneList.push({name: "@Jenny",value: "@Jenny dials Flame Elmo 17% of the time"});
 phoneList.push({name: "@Robyn",value: "@Robyn dials Party Robyn 22% of the time"});
 
-//0-10            Aedan                 Kevin                Ivan                 Mingson              Jeremy               Bryce                Kelly                Tae                  Vincent
-/*const IDArray = ['299020647198228480','419970850519777280','283414458590822401','266023244539232257','298696268920913924','147954160526950411','718326776165826580','687482247955218483','136447120658923520',
-//Rolando            Lola
-'96402723435446272','472305444518494208'];*/
-
+//Keeps tracks of users recently fired by the 'fired' command
 var RecentFires = [];
 
+//List of jokes to be used by 'hired' command
 const hireJokes = [' is still gonna be fired actually.', ' has been rehired! All your shifts start at 6:45am.', ' Welcome back! We have a thunderbird user on the line for you.', 
 ' nice to see you! Can you take a look at this ticket? It\'s been bouncing between us and health for weeks.', ' You\'re back! There\'s someone asking for you specifically, they seem upset.',
 ' Aloha! You have been selected to test our new 12am-6am graveyard shift',' has been moved to the People OU for transfer to Health IS', ' has been sent to our new Texas office for the next three years', 
@@ -116,6 +111,7 @@ const hireJokes = [' is still gonna be fired actually.', ' has been rehired! All
 // Actually do stuff.
 client.on('messageCreate', msg => {
   
+  //!CSXXXXXXX command, embeds link into discord channel
   var index = msg.content.toLowerCase().indexOf("!cs");
   if (index >= 0 && !isNaN(msg.content.substring(3+index,10+index))){
     var args = msg.content.substring(1+index,10+index);
@@ -160,21 +156,24 @@ client.on('messageCreate', msg => {
       });
     }
 
-    //BOB FIRED
+    //Fired command
     if(msg.content.includes("!fired")){
+      //If Ari uses the fired command, fires him instead
 		  if(msg.author.id == "718538581421064232"){
 			  msg.delete();
 			  msg.channel.send('<@718538581421064232> FIRED'); //Ari firing
 		  } 
+      //If not Ari fired a random lead (not career staf [Robyn, Steve, Jenny])
       else{
       toFire = getRandomInt(0,leadCarrerDict.length - 4);
       msg.channel.send(`<@${leadCarrerDict[toFire].ID}> Fired`);
+      //Push the ID to recent fires for hired command
       RecentFires.push(leadCarrerDict[toFire].ID);
-      console.log(RecentFires);
 		  }
     }
     
     if(msg.content.includes("!hired")){
+      //If no recent fires, fire someone to hire back
       if(RecentFires.length === 0){
         //-4 to cut out Robyn, Steve, and Jenny
         toHire = getRandomInt(0,leadCarrerDict.length - 4);
@@ -266,7 +265,8 @@ client.on('messageCreate', msg => {
     }
   }
 
-  //includes : needed for custom emotes
+  //Custom Emote pings
+  //Searches through Phonebook for emote used
   if(msg.content.includes(":")){
     for(var i = 0; i < leadCarrerDict.length; i++){
       if(msg.content.includes(leadCarrerDict[i]["EmoteN"])){
@@ -274,72 +274,6 @@ client.on('messageCreate', msg => {
         break;
       }
     }
-    /*//custom emoji commands collapsed here
-    //#region 
-
-    //Jenny
-    if(msg.content.includes(":snorlax:")){
-      msg.channel.send("<@491450429679468565>");
-    }
-
-
-    //Jim
-    else if(msg.content.includes(":bandanadee:")){
-      msg.channel.send("<@!354474386213830656>");
-    }
-
-    //Robyn
-    else if(msg.content.includes(":partyrobyn:")){
-      msg.channel.send("<@880110499512061964>");
-    }
-	
-	  //Ivan
-    else if(msg.content.includes(":concern:")){
-      msg.channel.send("<@283414458590822401>");
-    }
-	
-	  //Steven
-    else if(msg.content.includes(":orang:")){
-      msg.channel.send("<@138143243559895040>");
-    }
-	
-	
-	  //Rolando
-    else if(msg.content.includes(":AAA:")){
-      msg.channel.send("<@96402723435446272>");
-    }	
-	  
-  
-    //Aedan
-    else if(msg.content.includes(":ThatDawg:")){
-      msg.channel.send("<@299020647198228480>");
-    }
-
-    //Dylan
-    else if(msg.content.includes(":fingergunsleft:")){
-      msg.channel.send("<@339622598407225354>")
-    }
-
-    //Ariana
-    else if(msg.content.includes(":dabariana:")){
-      msg.channel.send("<@498262016973078549>")
-    }
-
-    //Kevin
-    else if(msg.content.includes(":laoo:")){
-      msg.channel.send("<@419970850519777280>")
-    }
-
-    //Tae
-    else if(msg.content.includes(":bumis:")){
-      msg.channel.send("<@687482247955218483>")
-    }
-
-    //Vincent
-    else if(msg.content.includes(":bang:")){
-      msg.channel.send("<@136447120658923520>")
-    }
-    //#endregion*/
   }
 
 	//Steve Kermit GIF
@@ -375,7 +309,7 @@ client.on('messageCreate', msg => {
     msg.channel.send({ embeds: [phonebook] });
   }
   
-  if(msg.content.toLowerCase().includes("fuck")|msg.content.toLowerCase().includes("shit")|msg.content.toLowerCase().includes(" ass ")|msg.content.toLowerCase().includes(" assh")|msg.content.toLowerCase().includes("dumbass")|msg.content.toLowerCase().includes("bastard")){
+  if(msg.content.toLowerCase().includes("fuck")|msg.content.toLowerCase().includes("shit")|msg.content.toLowerCase().includes(" ass ")|msg.content.toLowerCase().includes("bitch")|msg.content.toLowerCase().includes("dumbass")|msg.content.toLowerCase().includes("bastard")){
     msg.channel.send("LANGUAGE");
   }
 	
@@ -452,50 +386,3 @@ const phonebook = new Discord.EmbedBuilder()
 .setThumbnail('https://cdn.discordapp.com/attachments/765777043639762948/787101249764851742/e39ec5942bc69d0a6392f507ff3321ed.png')
 //... expands a list into arguments
 .addFields(...phoneList)
-
-/*.addFields({
-    name: "<:snorlax:784554135420272640>",
-    value: "snorlax dials Jenny"
-},{
-    name: "<:bandanadee:785003854857109524>",
-    value: "bandanadee dials Jim"
-},{
-    name: "<:partyrobyn:1017136291374174311>",
-    value: "partyrobyn dials Robyn. buy nitro, peasant"
-},{
-    name: "<:concern:1017133018390995005>",
-    value: "concern dials Ivan"
-},{
-    name: "<:orang:1007509643762868314>",
-    value: "orang dials Steven"
-},{
-    name: "<:orangutan:266023244539232257>",
-    value: "orangutan dials Mingson"
-},{
-    name: "<:ThatDawg:1150857342968152211>",
-    value: "ThatDawg dials Aedan"
-},{
-    name: "<:fingergunsleft:785979564697452574>",
-    value: "fingergunsleft dials Dylan"
-},{
-    name: "<:laoo:1088529626105647114>",
-    value: "laoo dials Kevin"
-},{
-    name : "<:bumis:916554784625025116>",
-    value: "bumis dials Tae"
-},{
-    name: "<:dabariana:1150859157273055343>",
-    value: "dabariana dials Ariana"
-},{
-    name: "<:bang:1088606779748913292>",
-    value: "bang dials Vincent"
-},{
-    name: "@Steve",
-    value: "@Steve dials Kermit 30% of the time."
-},{
-    name: "@Jenny",
-    value: "@Jenny dials Flame Elmo 17% of the time"
-},{
-    name: "@Robyn",
-    value: "@Robyn dials Party Robyn 22% of the time"
-});*/
