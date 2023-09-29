@@ -22,7 +22,7 @@ const leadCarrerDict = [{
     Name: "Jeremy",
     EmoteN: ":yippee:",
     EmoteID: "<:yippee:1125508542909128874>",
-    ID: '1157212727048146995'
+    ID: '217447461327732738'
   },{
     Name: "Aedan",
     EmoteN: ":ThatDawg:",
