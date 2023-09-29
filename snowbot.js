@@ -19,12 +19,11 @@ client.on('ready', () => {
 //A collection of leads, discord IDs, and emotes associated
 //Might wanna split to have emote ID
 const leadCarrerDict = [{
-    Name: "Steven",
-    EmoteN: ":orang:",
-    EmoteID: ':orang:1007509643762868314',
-    ID: '138143243559895040'
-  },
-  {
+    Name: "Jeremy",
+    EmoteN: ":yippee:",
+    EmoteID: "<:yippee:1125508542909128874>",
+    ID: '1157212727048146995'
+  },{
     Name: "Aedan",
     EmoteN: ":ThatDawg:",
     EmoteID: "<:ThatDawg:1150857342968152211>",
