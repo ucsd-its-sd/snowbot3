@@ -316,7 +316,7 @@ function getRandomInt(min, max) {
 const cheatsheet = new Discord.EmbedBuilder()
 .setColor(0x442691)
 .setTitle('Helpful Links')
-.setThumbnail("https://cdn.discordapp.com/attachments/765777043639762948/775839889836343336/sammy.jpg")
+.setThumbnail("https://cdn.discordapp.com/attachments/787254252077580289/1159945279005544509/Screenshot_2023-10-06_at_1.08.06_PM.png?ex=6532de39&is=65206939&hm=4e2fa28ec85f11e206b7d1afeee56c0a3722d86d86dae485e6924a09f6b4a99d&")
 .addFields({
     name: "Accounts",
     value: "[IT Tools](https://ittools.ucsd.edu) | [MailUPD](https://mailupd.ucsd.edu) | [SALT](https://salt.ucsd.edu) | [Duo Admin](https://admin-ce13a1a7.duosecurity.com/) | [DSA Lookup](https://iam.ucsd.edu/dsasearch/)"
