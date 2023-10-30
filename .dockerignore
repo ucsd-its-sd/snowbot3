@@ -1,6 +1,5 @@
-node_modules/
-dist/
-.gitignore
-compose.yaml
-Dockerfile
-config.json
+*
+!tsconfig.json
+!src/*
+!package.json
+!package-lock.json
