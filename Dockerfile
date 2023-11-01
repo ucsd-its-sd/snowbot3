@@ -4,6 +4,8 @@ ARG NODE_VERSION=20.9.0
 
 FROM node:${NODE_VERSION}-alpine
 
+LABEL org.opencontainers.image.source=https://github.com/j613/SNOWbot3
+
 WORKDIR /usr/snowbot
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
