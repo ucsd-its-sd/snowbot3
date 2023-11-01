@@ -1,5 +1,5 @@
 import * as process from "process";
-import { Client, GatewayIntentBits } from "discord.js";
+import { Client, GatewayIntentBits, Events } from "discord.js";
 
 const client = new Client({
     intents: [
@@ -11,10 +11,8 @@ const client = new Client({
 
 client.login(process.env["DISCORD_TOKEN"]);
 
-client.on("ready", () => {
+client.on(Events.ClientReady, () => {
     console.log(`Successfully logged in as ${client.user!.tag}`);
 });
 
-client.on("messageCreate", (msg) => {
-    console.log(msg);
-});
+client.on(Events.MessageCreate, (msg) => {});
