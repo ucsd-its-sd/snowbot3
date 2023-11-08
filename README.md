@@ -12,7 +12,7 @@ gh auth login -s read:packages
 gh config get -h github.com oauth_token | docker login ghcr.io -u <username> --password-stdin
 ```
 
-To run the bot, execute `docker run --name snowbot3 --env-file env.list ghcr.io/j613/snowbot3`, where `env.list` contains
+To run the bot, execute `docker run --name snowbot3 --env-file env.list ghcr.io/j613/snowbot3:latest`, where `env.list` contains
 
 ```sh
 DISCORD_TOKEN=<token>
