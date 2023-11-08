@@ -21,3 +21,39 @@ export class SnowCommand implements Command {
         msg.channel.send({ embeds: [ticketEmbed] });
     }
 }
+
+export class KnowledgeBaseCommand implements Command {
+    regex = /!kb (?<search>.+)/;
+    name = "!kb <search terms>";
+    description =
+        "Searches the Knowledge Base for any text that appears \
+        after the command, then sends a link to the results.";
+
+    execute(msg: Message, match: CommandMatch): void {
+        const args = encodeURI(match.groups.search);
+        const kbUrl = `https://support.ucsd.edu/its?id=search&spa=1&q=${args}`
+        const kbEmbed = new EmbedBuilder().setDescription(
+            `[Knowledge Base Search Results for ${match.groups.search}](${kbUrl})`
+        );
+
+        msg.channel.send({ embeds: [kbEmbed] });
+    }
+}
+
+export class MailUpdCommand implements Command {
+    regex = /!p (?<user>\w+)/;
+    name = "!p <username>";
+    description = "Posts a link to a user's MailUPD page";
+
+    execute(msg: Message, match: CommandMatch): void {
+        const user = match.groups.user;
+        const mailUpdUrl = `https://mailupd.ucsd.edu/view?id=${user}`;
+        const mailUpdEmbed = new EmbedBuilder().setDescription(
+            `[MailUPD page for ${user}](${mailUpdUrl})`
+        );
+
+        msg.channel.send({ embeds: [mailUpdEmbed] });
+    }
+}
+
+// TODO: Add !sal command for PID
