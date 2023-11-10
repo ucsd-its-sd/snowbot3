@@ -23,20 +23,40 @@ export class SnowCommand implements Command {
 }
 
 export class KnowledgeBaseCommand implements Command {
-    regex = /!kb (?<search>.+)/;
+    regex = /!kb (?<search>.+)$/;
     name = "!kb <search terms>";
     description =
         "Searches the Knowledge Base for any text that appears \
-        after the command, then sends a link to the results.";
+        after the command (on the same line), \
+        then sends a link to the results.";
 
     execute(msg: Message, match: CommandMatch): void {
         const args = encodeURI(match.groups.search);
         const kbUrl = `https://support.ucsd.edu/its?id=search&spa=1&q=${args}`
         const kbEmbed = new EmbedBuilder().setDescription(
-            `[Knowledge Base Search Results for ${match.groups.search}](${kbUrl})`
+            `[Knowledge Base Search Results](${kbUrl})`
         );
 
         msg.channel.send({ embeds: [kbEmbed] });
+    }
+}
+
+export class CollabCommand implements Command {
+    regex = /!collab (?<search>.+)$/;
+    name = "!collab <search terms>";
+    description =
+        "Searches Confluence (Collab) for any text that appears \
+        after the command (on the same line), \
+        then sends a link to the results.";
+
+    execute(msg: Message, match: CommandMatch): void {
+        const args = encodeURI(match.groups.search);
+        const collabUrl = `https://ucsdcollab.atlassian.net/wiki/search?spaces=CKB&text=${args}`;
+        const collabEmbed = new EmbedBuilder().setDescription(
+            `[Collab Search Results](${collabUrl})`
+        );
+
+        msg.channel.send({ embeds: [collabEmbed] });
     }
 }
 
@@ -56,4 +76,18 @@ export class MailUpdCommand implements Command {
     }
 }
 
-// TODO: Add !sal command for PID
+export class SalCommand implements Command {
+    regex = /!sal (?<pid>\w+)/;
+    name = "!sal <PID>";
+    description = "Posts a link to a user's SAL page";
+
+    execute(msg: Message, match: CommandMatch): void {
+        const pid = match.groups.pid;
+        const salUrl = `https://sal.ucsd.edu/students/${pid}`;
+        const salEmbed = new EmbedBuilder().setDescription(
+            `[SAL page for ${pid}](${salUrl})`
+        );
+
+        msg.channel.send({ embeds: [salEmbed] });
+    }
+}
