@@ -9,7 +9,7 @@ export class ListCommand implements Command {
 
 
     execute(msg: Message, match: CommandMatch): void {
-
+        msg.channel.send({ embeds: [this.cheatsheet] });
     }
 
     cheatsheet = new EmbedBuilder()
@@ -34,11 +34,10 @@ export class ListCommand implements Command {
         }, {
             name: "Service Desk",
             value: "[Business Units](https://ucsdcollab.atlassian.net/wiki/spaces/CKB/pages/13113005/ITS+Business+Units) \
-            | [Health Support Matrix](https://ucsdcollab.atlassian.net/wiki/spaces/CKB/pages/13115634/Health+Information+Services+HIS+and+ITS+Support+Matrix+for+Customers+in+the+Healthcare+OU) \
-            | "
+            | [Health Support Matrix](https://ucsdcollab.atlassian.net/wiki/spaces/CKB/pages/13115634/Health+Information+Services+HIS+and+ITS+Support+Matrix+for+Customers+in+the+Healthcare+OU)"
         }, {
             name: "Health Numbers",
-            value: "Normal Number: (619) 543-4357 \n Queue Skip Number: (619) 543-4747"
+            value: "Normal Number: (619) 543-4357 \nQueue Skip Number: (619) 543-4747"
         }, {
             name: "Other Numbers",
             value: "Service Desk: (858) 246-4357 \
