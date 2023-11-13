@@ -2,8 +2,8 @@
 
 ## Running (without clone)
 
-This requires both [the Docker engine](https://www.docker.com/products/docker-desktop/) and [the GitHub client](https://cli.github.com/). 
-You can also manually make a personal access token with GitHub if you prefer, but it is easier to use `gh`.
+This requires both [the Docker engine](https://www.docker.com/products/docker-desktop/) and [the GitHub client](https://cli.github.com/).
+You can also [manually make a personal access token](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry) with GitHub if you prefer, but it is easier to use `gh`.
 
 To authenticate for pulling Docker images from GitHub Container Repository, run:
 
@@ -12,7 +12,7 @@ gh auth login -s read:packages
 gh config get -h github.com oauth_token | docker login ghcr.io -u <username> --password-stdin
 ```
 
-To run the bot, execute `docker run --name snowbot3 --env-file env.list ghcr.io/j613/snowbot3:latest`, where `env.list` contains
+To run the bot, execute `docker run --name snowbot3 --env-file env.list ghcr.io/ucsd-its-sd/snowbot3:latest`, where `env.list` contains
 
 ```sh
 DISCORD_TOKEN=<token>
@@ -29,6 +29,6 @@ gh auth login -s read:packages,write:packages
 gh config get -h github.com oauth_token | docker login ghcr.io -u <username> --password-stdin
 ```
 
-To build locally, run `docker build . -t ghcr.io/j613/snowbot3:latest`. Then run as above.
+To build locally, run `docker build . -t ghcr.io/ucsd-its-sd/snowbot3:latest` (`-t` tags the build for pushing later). Then run as above.
 
-To push the package, run `docker push ghcr.io/j613/snowbot3:latest` after building.
+To push the package, run `docker push ghcr.io/ucsd-its-sd/snowbot3:latest` after building.
