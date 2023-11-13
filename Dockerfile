@@ -4,7 +4,7 @@ ARG NODE_VERSION=20.9.0
 
 FROM node:${NODE_VERSION}-alpine
 
-LABEL org.opencontainers.image.source=https://github.com/j613/SNOWbot3
+LABEL org.opencontainers.image.source=https://github.com/ucsd-its-sd/SNOWbot3
 
 WORKDIR /usr/snowbot
 
