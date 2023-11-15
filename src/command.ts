@@ -21,7 +21,7 @@ export interface Command {
     /**
      * A short description of the command, used in the help command.
      */
-    description: string;
+    description: string | null;
 
     /**
      * Run when the command is detected.
