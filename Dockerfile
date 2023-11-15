@@ -4,8 +4,10 @@ ARG NODE_VERSION=20.9.0
 
 FROM node:${NODE_VERSION}-alpine
 
+# Needed to have the package show up in GitHub
 LABEL org.opencontainers.image.source=https://github.com/ucsd-its-sd/SNOWbot3
 
+# For cleanliness
 WORKDIR /usr/snowbot
 
 # Download dependencies as a separate step to take advantage of Docker's caching.

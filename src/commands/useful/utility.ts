@@ -7,7 +7,6 @@ export class ListCommand implements Command {
     description =
         "Sends a small help menu with useful links and phone numbers.";
 
-
     execute(msg: Message, match: CommandMatch): void {
         msg.channel.send({ embeds: [this.cheatsheet] });
     }

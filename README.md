@@ -22,6 +22,8 @@ with `<token>` replaced by the bot's token.
 
 ## Contributing
 
+If you just cloned the repository, you'll want to run `npm install` to have type hints and other development niceties (VSCode recommended).
+
 When logging in, do the same as the above, but when using `gh`, add the `write:packages` scope.
 
 ```sh
