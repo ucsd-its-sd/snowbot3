@@ -12,7 +12,6 @@ const client = new Client({
 });
 
 const handler = new CommandHandler([new UsefulCommandModule(), new LessUsefulCommandModule()]);
-console.log(handler.exec());
 
 client.login(process.env["DISCORD_TOKEN"]);
 
@@ -21,5 +20,5 @@ client.on(Events.ClientReady, () => {
 });
 
 client.on(Events.MessageCreate, (msg) => {
-
+    handler.execute(msg);
 });
