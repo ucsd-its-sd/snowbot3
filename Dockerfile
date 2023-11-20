@@ -2,7 +2,7 @@
 
 ARG NODE_VERSION=20.9.0
 
-FROM node:${NODE_VERSION}-alpine
+FROM node:${NODE_VERSION}-bullseye-slim as base
 
 # Needed to have the package show up in GitHub
 LABEL org.opencontainers.image.source=https://github.com/ucsd-its-sd/SNOWbot3
@@ -19,14 +19,15 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=/root/.npm \
     npm ci
 
-# Copy the rest of the source files into the image.
-COPY . .
-
-# Build the application.
-RUN ["npm", "run", "build"]
+# Build the application, binding the required files.
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
+    --mount=type=bind,target=src/ \
+    npm run build
 
 # Run the application as a non-root user.
 USER node
 
 # Run the application.
-CMD ["npm", "run", "start"]
+CMD ["node", "dist/main.js"]
