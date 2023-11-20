@@ -23,11 +23,11 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
-    --mount=type=bind,target=src/ \
+    --mount=type=bind,source=src/,target=src/ \
     npm run build
 
 # Run the application as a non-root user.
 USER node
 
 # Run the application.
-CMD ["node", "dist/main.js"]
+ENTRYPOINT ["node", "dist/main.js"]
