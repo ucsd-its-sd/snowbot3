@@ -1,13 +1,19 @@
 import { Message } from "discord.js";
-import { CommandModule } from "./commandModule";
+import { ICommandModule } from "./commandModule";
 import { CommandMatch } from "./command";
+import { StateContainer } from "./stateContainer";
+import { State } from "./state";
 
 export class CommandHandler {
-    modules: CommandModule[];
+    modules: ICommandModule[];
+
+    state: StateContainer<State>;
 
     private combinedRegex: RegExp;
 
-    constructor(modules: CommandModule[]) {
+    constructor(state: StateContainer<State>, modules: ICommandModule[]) {
+        this.state = state;
+
         this.modules = modules;
 
         const namedGroupRegex = /\(\?<(\w+)>/g;
@@ -49,7 +55,7 @@ export class CommandHandler {
             let [mi, ci] = prefix.split('_').slice(1).map(x => parseInt(x));
             let command = this.modules[mi].commands[ci];
 
-            command.execute(msg, commandMatch);
+            command.execute(msg, commandMatch, this.state);
         }
     }
 }

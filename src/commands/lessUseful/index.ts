@@ -1,7 +1,7 @@
-import { CommandModule } from '../../commandModule';
+import { ICommandModule } from '../../commandModule';
 import { CallResponseCommand } from '../callResponse';
 
-export class LessUsefulCommandModule implements CommandModule {
+export class LessUsefulCommandModule implements ICommandModule {
     commands = [
         new CallResponseCommand("!ping", "pong"),
         new CallResponseCommand("!sleep", "go to bed"),

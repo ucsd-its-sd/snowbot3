@@ -1,4 +1,6 @@
 import { Message } from "discord.js";
+import { StateContainer } from "./stateContainer";
+import { State } from "./state";
 
 /**
  * Describes a command, including its match regex and execution function.
@@ -28,7 +30,7 @@ export interface Command {
      * @param msg The message that triggered the command.
      * @param match Information about the matched command.
      */
-    execute(msg: Message, match: CommandMatch): void;
+    execute(msg: Message, match: CommandMatch, state: StateContainer<State>): void;
 }
 
 

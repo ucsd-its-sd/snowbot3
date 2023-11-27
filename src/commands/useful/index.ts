@@ -1,9 +1,9 @@
-import { CommandModule } from '../../commandModule';
+import { ICommandModule } from '../../commandModule';
 import * as utility from './utility';
 import * as search from './search';
 import { CallResponseCommand } from '../callResponse';
 
-export class UsefulCommandModule implements CommandModule {
+export class UsefulCommandModule implements ICommandModule {
     commands = [
         new search.SnowCommand(),
         new utility.ListCommand(),
