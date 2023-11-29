@@ -8,8 +8,13 @@ export interface ICommandModule extends EventTarget {
     commands: Command[];
 
     /** 
-     * If null, no help command will be generated.
+     * If undefined, no help command will be generated.
      * Otherwise, generates a help command with the given name.
      */
-    helpCommand: string | null;
+    helpCommand?: string;
+
+    /**
+     * Should only be undefined if `helpCommand` is undefined.
+     */
+    helpTitle?: string
 }

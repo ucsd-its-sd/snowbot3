@@ -7,5 +7,4 @@ export class LessUsefulCommandModule extends EventTarget implements ICommandModu
         new CallResponseCommand("!sleep", "go to bed"),
         new CallResponseCommand("!aloha", "World class customer service!"),
     ];
-    helpCommand = null;
 }

@@ -1,5 +1,0 @@
-*
-!tsconfig.json
-!src/*
-!package.json
-!package-lock.json

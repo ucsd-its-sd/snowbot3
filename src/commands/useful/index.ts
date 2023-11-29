@@ -20,5 +20,7 @@ export class UsefulCommandModule extends EventTarget implements ICommandModule {
             "https://media.discordapp.net/attachments/765777043639762948/886307401106604123/GettyImages-1060490970-dcac66d9cda841638d49bc10f5dc1a8b.webp",
             "Posts the NATO alphabet"),
     ];
+
     helpCommand = '!help';
+    helpTitle = 'Help';
 }

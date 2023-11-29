@@ -12,7 +12,6 @@ export class SnowCommand implements Command {
         so use it if you have a strange looking ticket.";
 
     execute(msg: Message, match: CommandMatch): void {
-        console.log(match.groups);
         const ticket = match.groups.ticket ?? match.groups.arg;
         const ticketUrl = `https://support.ucsd.edu/nav_to.do?uri=task.do?sysparm_query=number=${ticket}`;
         const ticketEmbed = new EmbedBuilder().setDescription(
@@ -67,7 +66,7 @@ export class MailUpdCommand implements Command {
     description = "Posts a link to a user's MailUPD page";
 
     execute(msg: Message, match: CommandMatch): void {
-        const user = match.groups.user;
+        const user = match.groups.user.toLowerCase();
         const mailUpdUrl = `https://mailupd.ucsd.edu/view?id=${user}`;
         const mailUpdEmbed = new EmbedBuilder().setDescription(
             `[MailUPD page for ${user}](${mailUpdUrl})`
@@ -83,7 +82,7 @@ export class SalCommand implements Command {
     description = "Posts a link to a user's SAL page";
 
     execute(msg: Message, match: CommandMatch): void {
-        const pid = match.groups.pid;
+        const pid = match.groups.pid.toLowerCase();
         const salUrl = `https://sal.ucsd.edu/students/${pid}`;
         const salEmbed = new EmbedBuilder().setDescription(
             `[SAL page for ${pid}](${salUrl})`

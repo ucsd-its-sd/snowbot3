@@ -17,7 +17,7 @@ const client = new Client({
 // if we were to accidentally create a command that can access arbitrary state.
 // I've decided that since this is an internal tool and its very easy to reset 
 // the token, this is acceptable, but there are many better ways to do this.
-const state = new JSONStateContainer<State>('config.json');
+const state = new JSONStateContainer<State>('./config.json');
 
 const handler = new CommandHandler(state, [new UsefulCommandModule(), new LessUsefulCommandModule()]);
 
@@ -25,4 +25,8 @@ client.on(Events.ClientReady, () => {
     console.log(`Successfully logged in as ${client.user!.tag}`);
 });
 
-client.on(Events.MessageCreate, handler.execute);
+// We have to bind to handler, because otherwise it becomes bound to client :(
+client.on(Events.MessageCreate, handler.execute.bind(handler));
+
+// Login with the token from the state
+client.login(state.read().token);
