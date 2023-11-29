@@ -3,7 +3,7 @@ import * as utility from './utility';
 import * as search from './search';
 import { CallResponseCommand } from '../callResponse';
 
-export class UsefulCommandModule implements ICommandModule {
+export class UsefulCommandModule extends EventTarget implements ICommandModule {
     commands = [
         new search.SnowCommand(),
         new utility.ListCommand(),

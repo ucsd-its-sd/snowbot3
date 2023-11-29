@@ -1,7 +1,7 @@
 import { PathLike, readFileSync } from "fs";
 import * as fs from "fs/promises";
 
-export interface StateContainer<T> {
+export interface IStateContainer<T> {
     /** Gets the current state. */
     read(): T;
 
@@ -9,7 +9,7 @@ export interface StateContainer<T> {
     write(state: T): void;
 }
 
-export class JSONStateContainer<T> implements StateContainer<T> {
+export class JSONStateContainer<T> implements IStateContainer<T> {
     private file: PathLike;
 
     private state: T;
@@ -26,7 +26,9 @@ export class JSONStateContainer<T> implements StateContainer<T> {
         this.init();
     }
 
-    read = () => this.state;
+    read(): T {
+        return this.state;
+    }
 
     write(state: T): void {
         fs.writeFile(this.file, JSON.stringify(state));

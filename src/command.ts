@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { StateContainer } from "./stateContainer";
+import { IStateContainer } from "./stateContainer";
 import { State } from "./state";
 
 /**
@@ -30,7 +30,7 @@ export interface Command {
      * @param msg The message that triggered the command.
      * @param match Information about the matched command.
      */
-    execute(msg: Message, match: CommandMatch, state: StateContainer<State>): void;
+    execute(msg: Message, match: CommandMatch, state: IStateContainer<State>): void;
 }
 
 
