@@ -31,7 +31,7 @@ export class JSONStateContainer<T> implements IStateContainer<T> {
     }
 
     write(state: T): void {
-        fs.writeFile(this.file, JSON.stringify(state));
+        fs.writeFile(this.file, JSON.stringify(state, undefined, 4));
     }
 
     private async init() {

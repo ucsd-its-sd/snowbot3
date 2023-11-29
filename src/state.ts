@@ -15,4 +15,7 @@ export interface Lead {
 
     /** Of the format :name: */
     emoteName: string;
+
+    /** Whether the lead is opted-out from firing */
+    dontFire?: boolean;
 }
