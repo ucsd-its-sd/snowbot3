@@ -30,6 +30,8 @@ export class CommandHandler {
     }
 
     execute(msg: Message): void {
+        if (msg.author.bot) return;
+
         let matches = msg.content.matchAll(this.combinedRegex);
         // For every matched command:
         for (let match of matches) {
