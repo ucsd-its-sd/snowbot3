@@ -1,7 +1,7 @@
 import { Message, EmbedBuilder } from "discord.js";
 import { Command, CommandMatch } from "../../command";
 
-export class SnowCommand implements Command {
+export class SnowCommand extends Command {
     regex = /!(snow (?<arg>\w+)|(?<ticket>[a-zA-Z]{2,6}\d{7}))/;
     name = "!snow <ticket>, or !cs<number>, !inc<number>, etc.";
     description =
@@ -22,7 +22,7 @@ export class SnowCommand implements Command {
     }
 }
 
-export class KnowledgeBaseCommand implements Command {
+export class KnowledgeBaseCommand extends Command {
     regex = /!kb (?<search>.+)$/;
     name = "!kb <search terms>";
     description =
@@ -41,7 +41,7 @@ export class KnowledgeBaseCommand implements Command {
     }
 }
 
-export class CollabCommand implements Command {
+export class CollabCommand extends Command {
     regex = /!collab (?<search>.+)$/;
     name = "!collab <search terms>";
     description =
@@ -60,7 +60,7 @@ export class CollabCommand implements Command {
     }
 }
 
-export class MailUpdCommand implements Command {
+export class MailUpdCommand extends Command {
     regex = /!p (?<user>\w+)/;
     name = "!p <username>";
     description = "Posts a link to a user's MailUPD page";
@@ -76,7 +76,7 @@ export class MailUpdCommand implements Command {
     }
 }
 
-export class SalCommand implements Command {
+export class SalCommand extends Command {
     regex = /!sal (?<pid>\w+)/;
     name = "!sal <PID>";
     description = "Posts a link to a user's SAL page";

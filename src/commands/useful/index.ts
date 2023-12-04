@@ -1,9 +1,9 @@
-import { ICommandModule } from '../../commandModule';
+import { CommandModule } from '../../commandModule';
 import * as utility from './utility';
 import * as search from './search';
 import { CallResponseCommand } from '../callResponse';
 
-export class UsefulCommandModule extends EventTarget implements ICommandModule {
+export class UsefulCommandModule extends CommandModule {
     commands = [
         new search.SnowCommand(),
         new utility.ListCommand(),

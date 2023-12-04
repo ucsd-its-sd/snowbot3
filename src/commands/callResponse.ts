@@ -4,12 +4,14 @@ import { Command, CommandMatch } from "../command";
 /**
  * A command that responds to a message with a string.
  */
-export class CallResponseCommand implements Command {
+export class CallResponseCommand extends Command {
     name: string;
     response: string;
     description?: string;
 
     constructor(name: string, response: string, description?: string) {
+        super();
+
         this.name = name;
         this.response = response;
         this.description = description;

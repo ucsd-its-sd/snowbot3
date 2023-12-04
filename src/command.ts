@@ -6,19 +6,19 @@ import { State } from "./state";
  * Describes a command, including its match regex and execution function.
  * Implement this interface to create a command.
  */
-export interface Command {
+export abstract class Command {
     /**
      * The regular expression that needs to match to run this command.
      * The regex should have a named capture group for each argument.
      * The regex will be run with the flags `igm`.
      * @example /!sal (?<pid>\w+)/
      */
-    regex: RegExp;
+    abstract regex: RegExp;
 
     /**
      * The name of the command, used in the help command.
      */
-    name: string;
+    abstract name: string;
 
     /**
      * A short description of the command, used in the help command.
@@ -30,9 +30,11 @@ export interface Command {
      * @param msg The message that triggered the command.
      * @param match Information about the matched command.
      */
-    execute(msg: Message, match: CommandMatch, state: IStateContainer<State>): void;
-}
+    abstract execute(msg: Message, match: CommandMatch, state: IStateContainer<State>): void;
 
+    /** Will be called once at startup. */
+    initialize(state: IStateContainer<State>): void { }
+}
 
 /**
  * Contains information about a matched command.

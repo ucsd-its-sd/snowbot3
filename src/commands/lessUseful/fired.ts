@@ -3,7 +3,7 @@ import { Command, CommandMatch } from "../../command";
 import { IStateContainer } from "../../stateContainer";
 import { Lead, State } from "../../state";
 
-export class FiredHiredCommand implements Command {
+export class FiredHiredCommand extends Command {
     regex = /!((?<fired>fired)|(?<hired>hired))/;
     name = '!fired and !hired';
     description = 'Fires or re-hires a random lead.';

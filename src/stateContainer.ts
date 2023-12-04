@@ -31,7 +31,9 @@ export class JSONStateContainer<T> implements IStateContainer<T> {
     }
 
     write(state: T): void {
-        fs.writeFile(this.file, JSON.stringify(state, undefined, 4));
+        fs.copyFile(this.file, `${this.file}.bak`).then(
+            () => fs.writeFile(this.file, JSON.stringify(state, undefined, 4)),
+            () => console.log("Failed to backup file, not proceeding with write."))
     }
 
     private async init() {

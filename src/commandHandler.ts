@@ -1,11 +1,11 @@
 import { APIEmbedField, EmbedBuilder, Message } from "discord.js";
-import { ICommandModule } from "./commandModule";
+import { CommandModule } from "./commandModule";
 import { Command, CommandMatch } from "./command";
 import { IStateContainer } from "./stateContainer";
 import { State } from "./state";
 
 export class CommandHandler {
-    modules: ICommandModule[];
+    modules: CommandModule[];
 
     helpCommands: (Command | null)[];
 
@@ -13,20 +13,24 @@ export class CommandHandler {
 
     private combinedRegex: RegExp;
 
-    constructor(state: IStateContainer<State>, modules: ICommandModule[]) {
+    constructor(state: IStateContainer<State>, modules: CommandModule[]) {
         this.state = state;
         this.modules = modules;
+
+        // Subscribe to each module's rebuild event.
+        for (const module of modules) {
+            module.addEventListener('rebuild', this.onRebuild.bind(this));
+
+            for (const command of module.commands) {
+                command.initialize(state);
+            }
+        }
 
         // Initialize help commands.
         this.helpCommands = modules.map(m => this.generateHelpCommand(m))
 
         // Initialize the regex.
         this.combinedRegex = this.buildRegex();
-
-        // Subscribe to each module's rebuild event.
-        for (const module of modules) {
-            module.addEventListener('rebuild', this.onRebuild);
-        }
     }
 
     execute(msg: Message): void {
@@ -66,15 +70,16 @@ export class CommandHandler {
      */
     private onRebuild(event: Event): void {
         // Find the module in our list, then assign the relevant help command.
-        const index = this.modules.indexOf(event.target as ICommandModule)
+        const index = this.modules.indexOf(event.target as CommandModule);
         this.helpCommands[index] = this.generateHelpCommand(this.modules[index]);
 
         // Rebuild the regex.
         this.combinedRegex = this.buildRegex();
+        console.log(this.combinedRegex);
     }
 
     /** Generates a help command for the given module. */
-    private generateHelpCommand(module: ICommandModule): Command | null {
+    private generateHelpCommand(module: CommandModule): Command | null {
         if (module.helpCommand == undefined || module.helpTitle == undefined) return null;
 
         // Technically we have to narrow this now, because at execution
@@ -95,6 +100,7 @@ export class CommandHandler {
 
                 msg.channel.send({ embeds: [helpEmbed] });
             },
+            initialize: () => { }
         };
     }
 

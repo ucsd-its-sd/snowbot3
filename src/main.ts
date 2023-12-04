@@ -19,7 +19,10 @@ const client = new Client({
 // the token, this is acceptable, but there are many better ways to do this.
 const state = new JSONStateContainer<State>('./config.json');
 
-const handler = new CommandHandler(state, [new UsefulCommandModule(), new LessUsefulCommandModule()]);
+// Create this first to get the phonebook from it
+const lessUseful = new LessUsefulCommandModule()
+
+const handler = new CommandHandler(state, [new UsefulCommandModule(), lessUseful, lessUseful.phonebook]);
 
 client.on(Events.ClientReady, () => {
     console.log(`Successfully logged in as ${client.user!.tag}`);

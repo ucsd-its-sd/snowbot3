@@ -1,7 +1,7 @@
 import { Message, EmbedBuilder } from "discord.js";
 import { Command, CommandMatch } from "../../command";
 
-export class ListCommand implements Command {
+export class ListCommand extends Command {
     regex = /!(ls|list)/;
     name = "!ls or !list";
     description =

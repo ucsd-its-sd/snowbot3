@@ -3,9 +3,9 @@ import { Command } from "./command";
 /** Command modules can dispatch this to trigger a regex rebuild. */
 export const rebuildEvent = new Event('rebuild');
 
-export interface ICommandModule extends EventTarget {
+export abstract class CommandModule extends EventTarget {
     /** The commands in this module. */
-    commands: Command[];
+    abstract get commands(): Command[];
 
     /** 
      * If undefined, no help command will be generated.
@@ -16,5 +16,5 @@ export interface ICommandModule extends EventTarget {
     /**
      * Should only be undefined if `helpCommand` is undefined.
      */
-    helpTitle?: string
+    helpTitle?: string;
 }
