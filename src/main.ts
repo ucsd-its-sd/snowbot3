@@ -1,8 +1,8 @@
 import { Client, GatewayIntentBits, Events } from "discord.js";
-import { CommandHandler } from "./commandHandler";
-import { LessUsefulCommandModule, UsefulCommandModule } from "./commands";
-import { JSONStateContainer } from "./stateContainer";
-import { State } from "./state";
+import { CommandHandler } from "./lib/commandHandler";
+import { LessUsefulCommandModule, UsefulCommandModule } from "./lib/commands";
+import { JSONStateContainer } from "./lib/stateContainer";
+import { State } from "./lib/state";
 
 const client = new Client({
     intents: [
