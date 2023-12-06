@@ -1,21 +1,21 @@
 export interface State {
-    token: string;
+  token: string;
 
-    leads: Lead[];
+  leads: Lead[];
 }
 
 export interface Lead {
-    name: string;
+  name: string;
 
-    /** Of the format <@number>. */
-    ping: string;
+  /** Of the format <@number>. */
+  ping: string;
 
-    /** Of the format <:name:number>, unless it is a default emoji. */
-    emote: string;
+  /** Of the format <:name:number>, unless it is a default emoji. */
+  emote: string;
 
-    /** Of the format :name: */
-    emoteName: string;
+  /** Of the format :name: */
+  emoteName: string;
 
-    /** Whether the lead is opted-out from firing */
-    dontFire?: boolean;
+  /** Whether the lead is opted-out from firing */
+  dontFire?: boolean;
 }
