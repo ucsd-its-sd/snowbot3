@@ -1,8 +1,7 @@
 import { Client, GatewayIntentBits, Events } from "discord.js";
-import { CommandHandler } from "./lib/commandHandler";
-import { LessUsefulCommandModule, UsefulCommandModule } from "./lib/commands";
-import { JSONStateContainer } from "./lib/stateContainer";
-import { type State } from "./lib/state";
+import { CommandHandler } from "./lib/command";
+import { State, JSONStateContainer } from "./lib/state";
+import { LessUsefulCommandModule, UsefulCommandModule } from "./commands";
 
 const client = new Client({
   intents: [
@@ -17,7 +16,7 @@ const client = new Client({
 // if we were to accidentally create a command that can access arbitrary state.
 // I've decided that since this is an internal tool and its very easy to reset
 // the token, this is acceptable, but there are many better ways to do this.
-const state = new JSONStateContainer<State>("./config.json");
+const state = new JSONStateContainer<State>("./config/config.json");
 
 // Create this first to get the phonebook from it
 const lessUseful = new LessUsefulCommandModule();

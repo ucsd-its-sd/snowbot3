@@ -1,5 +1,5 @@
 import { Message, EmbedBuilder } from "discord.js";
-import { Command, CommandMatch } from "../../command";
+import { Command, CommandMatch } from "../../lib/command";
 
 export class ListCommand extends Command {
   regex = /!(ls|list)/;

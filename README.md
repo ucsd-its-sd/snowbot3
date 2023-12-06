@@ -12,17 +12,19 @@ gh auth login -s read:packages
 gh config get -h github.com oauth_token | docker login ghcr.io -u <username> --password-stdin
 ```
 
-To run the bot, execute `docker run --name snowbot3 --env-file env.list ghcr.io/ucsd-its-sd/snowbot3:latest`, where `env.list` contains
+To run the bot, execute `docker run --name snowbot3 -v ./config:/usr/snowbot/config --rm ghcr.io/ucsd-its-sd/snowbot3:latest`, where `config/` contains a file `config/config.json` with at least
 
-```sh
-DISCORD_TOKEN=<token>
+```json
+{
+    token: "<token>"
+}
 ```
 
 with `<token>` replaced by the bot's token.
 
 ## Contributing
 
-If you just cloned the repository, you'll want to run `npm install` to have type hints and other development niceties (VSCode recommended).
+If you just cloned the repository, you'll want to run `npm install` to have type hints and other development niceties (VSCode recommended). You should also install the relevant Prettier extension to your IDE, so that you follow the same formatting guidelines.
 
 When logging in, do the same as the above, but when using `gh`, add the `write:packages` scope.
 

@@ -1,6 +1,5 @@
 import { Message } from "discord.js";
-import { IStateContainer } from "./stateContainer";
-import { State } from "./state";
+import { State, IStateContainer } from "../state";
 
 /**
  * Describes a command, including its match regex and execution function.

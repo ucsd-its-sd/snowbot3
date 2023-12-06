@@ -1,5 +1,5 @@
 import { Message, EmbedBuilder } from "discord.js";
-import { Command, CommandMatch } from "../../command";
+import { Command, CommandMatch } from "../../lib/command";
 
 export class SnowCommand extends Command {
   regex = /!(snow (?<arg>\w+)|(?<ticket>[a-zA-Z]{2,6}\d{7}))/;

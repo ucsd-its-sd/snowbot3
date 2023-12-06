@@ -1,8 +1,7 @@
 import { APIEmbedField, EmbedBuilder, Message } from "discord.js";
 import { CommandModule } from "./commandModule";
 import { Command, CommandMatch } from "./command";
-import { IStateContainer } from "./stateContainer";
-import { State } from "./state";
+import { State, IStateContainer } from "../state";
 
 export class CommandHandler {
   modules: CommandModule[];
@@ -82,7 +81,6 @@ export class CommandHandler {
 
     // Rebuild the regex.
     this.combinedRegex = this.buildRegex();
-    console.log(this.combinedRegex);
   }
 
   /** Generates a help command for the given module. */

@@ -1,7 +1,6 @@
 import { Message } from "discord.js";
-import { Command, CommandMatch } from "../../command";
-import { IStateContainer } from "../../stateContainer";
-import { Lead, State } from "../../state";
+import { Command, CommandMatch } from "../../lib/command";
+import { Lead, State, IStateContainer } from "../../lib/state";
 
 export class FiredHiredCommand extends Command {
   regex = /!((?<fired>fired)|(?<hired>hired))/;

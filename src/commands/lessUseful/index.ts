@@ -1,4 +1,4 @@
-import { CommandModule } from "../../commandModule";
+import { CommandModule } from "../../lib/command";
 import { CallResponseCommand } from "../callResponse";
 import { FiredHiredCommand } from "./fired";
 import { LeadCommand } from "./leads";

@@ -1,4 +1,4 @@
-import { type PathLike, readFileSync } from "fs";
+import { PathLike, readFileSync } from "fs";
 import * as fs from "fs/promises";
 
 export type IStateContainer<T> = {
@@ -31,12 +31,21 @@ export class JSONStateContainer<T> implements IStateContainer<T> {
   }
 
   write(state: T): void {
-    fs.copyFile(this.file, `${this.file}.bak`).then(
-      async () => fs.writeFile(this.file, JSON.stringify(state, undefined, 4)),
-      () => {
-        console.log("Failed to backup file, not proceeding with write.");
-      },
-    );
+    this.writeImpl(state);
+  }
+
+  private async writeImpl(state: T): Promise<void> {
+    const backup = `${this.file}.bak`;
+    const jsonStr = JSON.stringify(state, undefined, 4);
+    try {
+      // Write to a backup to make sure we don't accidentally corrupt the file.
+      await fs.writeFile(backup, jsonStr);
+
+      // Rename the backup to the actual file, overwriting it.
+      await fs.rename(backup, this.file);
+    } catch (e) {
+      console.error(e + "\nWrite failed. Attempted content was:\n" + jsonStr);
+    }
   }
 
   private async init(): Promise<void> {
@@ -47,11 +56,7 @@ export class JSONStateContainer<T> implements IStateContainer<T> {
       const watcher = fs.watch(this.file, { persistent: false, signal });
 
       // Every time we get a new event, re-read the file.
-      for await (const a of watcher) {
-        if (a.eventType == "rename") {
-          return;
-        }
-
+      for await (const e of watcher) {
         await this.update();
       }
     } catch (err) {

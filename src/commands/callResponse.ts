@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { Command, CommandMatch } from "../command";
+import { Command, CommandMatch } from "../lib/command";
 
 /**
  * A command that responds to a message with a string.

@@ -1,8 +1,11 @@
 import type { Message } from "discord.js";
-import { Command, type CommandMatch } from "../../command";
-import type { IStateContainer } from "../../stateContainer";
-import type { Lead, State } from "../../state";
-import { CommandModule, rebuildEvent } from "../../commandModule";
+import {
+  Command,
+  CommandMatch,
+  CommandModule,
+  rebuildEvent,
+} from "../../lib/command";
+import type { Lead, State, IStateContainer } from "../../lib/state";
 
 class Phonebook extends CommandModule {
   leadCommand: LeadCommand;
@@ -23,7 +26,7 @@ class Phonebook extends CommandModule {
 
 export class LeadCommand extends Command {
   regex =
-    /^!lead (?<ping><@\d+>) (add (?<add_name>\w+) (?<add_emote><(?<add_emote_name>:\w+:)\d+>)|fireable (?<fired_bool>true|false)|remove)$/;
+    /^!lead (refresh|(?<ping><@\d+>) (add (?<add_name>\w+) (?<add_emote><(?<add_emote_name>:\w+:)\d+>)|fireable (?<fired_bool>true|false)|remove))$/;
   name = "!lead";
 
   // Emoji commands keyed by ping.
@@ -35,7 +38,14 @@ export class LeadCommand extends Command {
   }
 
   execute(msg: Message, match: CommandMatch, state: IStateContainer<State>) {
-    const { ping } = match.groups;
+    if (!match.groups.ping) {
+      // Refresh
+      this.emojiList = this.generateEmojis(state.read().leads);
+      this.phonebook.dispatchEvent(rebuildEvent);
+      return;
+    }
+
+    const ping = match.groups.ping;
 
     const currState = state.read();
 
