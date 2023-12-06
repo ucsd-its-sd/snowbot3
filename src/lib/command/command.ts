@@ -28,6 +28,7 @@ export abstract class Command {
    * Run when the command is detected.
    * @param msg The message that triggered the command.
    * @param match Information about the matched command.
+   * @param state The state container.
    */
   abstract execute(
     msg: Message,
@@ -35,7 +36,10 @@ export abstract class Command {
     state: IStateContainer<State>,
   ): void;
 
-  /** Will be called once at startup. */
+  /**
+   * A function to be called once at start-up to initialize the command.
+   * @param state The state container.
+   */
   initialize(state: IStateContainer<State>): void {}
 }
 

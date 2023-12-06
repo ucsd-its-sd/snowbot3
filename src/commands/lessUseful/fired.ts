@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, MessageType } from "discord.js";
 import { Command, CommandMatch } from "../../lib/command";
 import { Lead, State, IStateContainer } from "../../lib/state";
 
@@ -31,11 +31,25 @@ export class FiredHiredCommand extends Command {
         this.lastReset = today;
       }
 
+      // Get leads
       let leads = state.read().leads;
+
+      // If this is a reply, fire the person who was replied to
+      if (msg.type == MessageType.Reply) {
+        msg.fetchReference().then((m) => {
+          msg.channel.send(`${m.author.toString()} Fired`);
+        });
+        return;
+      }
+
+      // Create a set from the current fired stack, for efficient existence check.
       let firedSet = new Set(this.firedStack);
 
+      // Get all leads that are not already fired and are not opted-out.
+      // Opt-out based so that if dontFire is missing, it is treated as fireable.
       let fireable = leads.filter((l) => !firedSet.has(l) && !l.dontFire);
 
+      // If there's no one to fire, cancel.
       if (fireable.length == 0) {
         msg.channel.send(
           "https://tenor.com/view/no-i-dont-think-i-will-gif-23864982",
@@ -43,12 +57,14 @@ export class FiredHiredCommand extends Command {
         return;
       }
 
+      // Choose a random person to fire.
       let fired = fireable[Math.floor(Math.random() * fireable.length)];
-
       this.firedStack.push(fired);
 
+      // "Fire" them.
       msg.channel.send(`${fired.ping} Fired`);
     } else {
+      // If there's no one to hire, don't hire anyone.
       if (this.firedStack.length == 0) {
         msg.channel.send(
           "https://tenor.com/view/no-i-dont-think-i-will-gif-23864982",
@@ -56,11 +72,14 @@ export class FiredHiredCommand extends Command {
         return;
       }
 
+      // Take the most recently fired person.
       let hired = this.firedStack.pop()!;
 
+      // Choose a random joke.
       let joke =
         this.hireJokes[Math.floor(Math.random() * this.hireJokes.length)];
 
+      // "Hire" them.
       msg.channel.send(hired.ping + joke);
     }
   }

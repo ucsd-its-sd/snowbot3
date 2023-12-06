@@ -16,7 +16,7 @@ To run the bot, execute `docker run --name snowbot3 -v ./config:/usr/snowbot/con
 
 ```json
 {
-    "token": "<token>"
+  "token": "<token>"
 }
 ```
 

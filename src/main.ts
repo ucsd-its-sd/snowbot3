@@ -2,6 +2,7 @@ import { Client, GatewayIntentBits, Events } from "discord.js";
 import { CommandHandler } from "./lib/command";
 import { State, JSONStateContainer } from "./lib/state";
 import { LessUsefulCommandModule, UsefulCommandModule } from "./commands";
+import { LeadModule as LeadCommandModule } from "./commands/lead";
 
 const client = new Client({
   intents: [
@@ -19,12 +20,13 @@ const client = new Client({
 const state = new JSONStateContainer<State>("./config/config.json");
 
 // Create this first to get the phonebook from it
-const lessUseful = new LessUsefulCommandModule();
+const lead = new LeadCommandModule();
 
 const handler = new CommandHandler(state, [
   new UsefulCommandModule(),
-  lessUseful,
-  lessUseful.phonebook,
+  new LessUsefulCommandModule(),
+  lead,
+  lead.phonebook,
 ]);
 
 client.on(Events.ClientReady, () => {
