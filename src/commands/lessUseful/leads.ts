@@ -38,10 +38,14 @@ export class LeadCommand extends Command {
   }
 
   execute(msg: Message, match: CommandMatch, state: IStateContainer<State>) {
+    // TODO: Only run if user is an admin.
+
     if (!match.groups.ping) {
       // Refresh
       this.emojiList = this.generateEmojis(state.read().leads);
       this.phonebook.dispatchEvent(rebuildEvent);
+
+      msg.channel.send("Refreshed the phonebook.");
       return;
     }
 
