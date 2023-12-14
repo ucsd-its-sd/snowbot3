@@ -215,6 +215,8 @@ function generateEmojiCommand(lead: Lead): Command | undefined {
 
 function generateEmojis(leads: Lead[]): Record<string, Command> {
   return Object.fromEntries(
-    leads.map((x) => [x.ping, generateEmojiCommand(x)]).filter((x) => x),
+    leads
+      .map((x) => [x.ping, generateEmojiCommand(x)])
+      .filter((x) => x[1] != undefined),
   );
 }
