@@ -207,10 +207,6 @@ function generateEmojiCommand(lead: Lead): Command | undefined {
     name: lead.emote,
     description: `${lead.emoteName} dials ${lead.name}`,
     execute(msg: Message) {
-      if (msg.author.toString() == lead.ping) {
-        return;
-      }
-
       msg.channel.send(lead.ping);
     },
     initialize() {},
