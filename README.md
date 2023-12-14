@@ -14,6 +14,8 @@ To run the bot, execute `docker run --name snowbot3 -v ./config:/usr/snowbot/con
 
 `<token>` being replaced by the bot's token.
 
+To update the image, run `docker pull ghcr.io/ucsd-its-sd/snowbot3:latest`
+
 ## Contributing
 
 If you just cloned the repository, you'll want to run `npm install` to have type hints and other development niceties (VSCode recommended). You should also install the relevant Prettier extension to your IDE, so that you follow the same formatting guidelines.
