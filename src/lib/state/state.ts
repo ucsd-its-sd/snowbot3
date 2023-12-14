@@ -11,10 +11,10 @@ export interface Lead {
   ping: string;
 
   /** Of the format <:name:number>, unless it is a default emoji. */
-  emote: string;
+  emote?: string;
 
   /** Of the format :name: */
-  emoteName: string;
+  emoteName?: string;
 
   /** Whether the lead is opted-out from firing */
   dontFire?: boolean;

@@ -17,7 +17,8 @@ export class LeadModule extends CommandModule {
   phonebook: CommandModule = this._phonebook;
 
   commands = [
-    new lead.AddLeadCommand(this._phonebook),
+    new lead.AddLeadCommand(),
+    new lead.EmoteLeadCommand(this._phonebook),
     new lead.RemoveLeadCommand(this._phonebook),
     new lead.FireableLeadCommand(),
     new lead.RebuildLeadCommand(this._phonebook),

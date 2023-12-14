@@ -4,9 +4,40 @@ import type { Lead, State, IStateContainer } from "../../lib/state";
 import { Phonebook } from ".";
 
 export class AddLeadCommand extends Command {
-  regex =
-    /^!lead add (?<ping><@\d+>) (?<name>\w+) (?<emote><(?<emote_name>:\w+:)\d+>)$/;
-  name = "!lead add <ping> <name> <emote>";
+  regex = /^!lead add (?<ping><@\d+>) (?<name>\w+)$/;
+  name = "!lead add <ping> <name>";
+  description = "Adds a lead, and sets them up for !fired.";
+
+  execute(msg: Message, match: CommandMatch, state: IStateContainer<State>) {
+    if (!isAdmin(msg)) {
+      return;
+    }
+
+    // Destructure to get all relevant groups.
+    const { ping, name } = match.groups;
+
+    const currState = state.read();
+
+    // Don't add if they already exist.
+    if (currState.leads.find((lead) => lead.ping == ping)) {
+      msg.channel.send(`${ping} is already a lead.`);
+      return;
+    }
+
+    // Use name punning to create the lead.
+    const lead: Lead = { name, ping };
+
+    // Push new lead
+    currState.leads.push(lead);
+    state.write(currState);
+
+    msg.react("👍");
+  }
+}
+
+export class EmoteLeadCommand extends Command {
+  regex = /^!lead emote (?<ping><@\d+>) (?<emote><(?<emote_name>:\w+:)\d+>)?$/;
+  name = "!lead emote <ping> <emote>";
   description = "Adds a lead, and sets them up with an emote and for !fired.";
 
   // Property parameter to declare phonebook
@@ -15,38 +46,39 @@ export class AddLeadCommand extends Command {
   }
 
   execute(msg: Message, match: CommandMatch, state: IStateContainer<State>) {
-    if (!isAdmin(msg)) {
+    const { ping, emote, emote_name } = match.groups;
+
+    if (!isAdmin(msg) && msg.author.toString() != ping) {
       return;
     }
-
-    // Destructure to get all relevant groups.
-    const { ping, name, emote, emote_name } = match.groups;
 
     const currState = state.read();
 
-    // Don't add if they already exist.
-    const leadConflict = currState.leads.find(
-      (lead) => lead.ping == ping || lead.emote == emote,
-    );
-    if (leadConflict) {
-      msg.channel.send(
-        leadConflict.ping == ping
-          ? `${emote} is in use by ${leadConflict.name}`
-          : `${name} is already a lead.`,
-      );
+    // Save some time by saving the index.
+    const lead_ind = currState.leads.findIndex((lead) => lead.ping == ping);
+
+    // If the index doesn't exist, can't edit.
+    if (lead_ind == -1) {
+      msg.channel.send(`${ping} is not a lead.`);
       return;
     }
 
-    // Use name punning to create the lead.
-    const lead: Lead = { name, ping, emote, emoteName: emote_name };
-
-    // Add to the dictionary.
-    this.phonebook.emojiList[ping] = generateEmojiCommand(lead);
-    this.phonebook.dispatchEvent(rebuildEvent);
+    // If the emote is already taken, don't add it.
+    if (currState.leads.find((lead) => lead.emote == emote)) {
+      msg.channel.send(`${emote} is already in use.`);
+      return;
+    }
 
     // Push new lead
-    currState.leads.push(lead);
+    currState.leads[lead_ind].emote = emote;
+    currState.leads[lead_ind].emoteName = emote_name;
     state.write(currState);
+
+    // Add to the dictionary.
+    this.phonebook.emojiList[ping] = generateEmojiCommand(
+      currState.leads[lead_ind],
+    )!;
+    this.phonebook.dispatchEvent(rebuildEvent);
 
     msg.react(emote);
   }
@@ -91,7 +123,7 @@ export class RemoveLeadCommand extends Command {
     currState.leads.splice(lead, 1);
     state.write(currState);
 
-    msg.react(emote);
+    msg.react(emote ?? "👍");
   }
 }
 
@@ -101,11 +133,11 @@ export class FireableLeadCommand extends Command {
   description = "Sets whether a lead is fireable (true or false).";
 
   execute(msg: Message, match: CommandMatch, state: IStateContainer<State>) {
-    if (!isAdmin(msg)) {
+    const { ping } = match.groups;
+
+    if (!isAdmin(msg) && msg.author.toString() != ping) {
       return;
     }
-
-    const ping = match.groups.ping;
 
     // If they are not fireable, dontFire is true.
     const dontFire = match.groups.bool == "false";
@@ -125,7 +157,7 @@ export class FireableLeadCommand extends Command {
     currState.leads[lead].dontFire = dontFire;
     state.write(currState);
 
-    msg.react(currState.leads[lead].emote);
+    msg.react(currState.leads[lead].emote ?? "👍");
   }
 }
 
@@ -164,7 +196,11 @@ function isAdmin(msg: Message): boolean {
   );
 }
 
-function generateEmojiCommand(lead: Lead): Command {
+function generateEmojiCommand(lead: Lead): Command | undefined {
+  if (!lead.emote) {
+    return undefined;
+  }
+
   // Create the emoji command.
   return {
     regex: new RegExp(lead.emote),
@@ -183,6 +219,6 @@ function generateEmojiCommand(lead: Lead): Command {
 
 function generateEmojis(leads: Lead[]): Record<string, Command> {
   return Object.fromEntries(
-    leads.map((x) => [x.ping, generateEmojiCommand(x)]),
+    leads.map((x) => [x.ping, generateEmojiCommand(x)]).filter((x) => x),
   );
 }
