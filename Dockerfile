@@ -5,12 +5,10 @@ ARG NODE_VERSION=20.9.0
 FROM node:${NODE_VERSION}-bullseye-slim as base
 
 # Needed to have the package show up in GitHub
-LABEL org.opencontainers.image.source=https://github.com/ucsd-its-sd/SNOWbot3
+LABEL org.opencontainers.image.source=https://github.com/ucsd-its-sd/snowbot3
 
 # For cleanliness
-WORKDIR /usr/snowbot
-
-RUN chown -R node:node /usr/snowbot
+WORKDIR /home/snowbot
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
@@ -28,8 +26,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=src/,target=src/ \
     npm run build
 
-# Run the application as a non-root user.
-USER node
+COPY ./entry.sh /home/snowbot/entry.sh
 
 # Run the application.
-ENTRYPOINT ["node", "dist/main.js"]
+ENTRYPOINT [ "/home/snowbot/entry.sh" ]

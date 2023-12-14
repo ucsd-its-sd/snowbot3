@@ -4,7 +4,7 @@
 
 This requires [the Docker engine](https://www.docker.com/products/docker-desktop/).
 
-To run the bot, execute `docker run --name snowbot3 -v ./config:/usr/snowbot/config --rm ghcr.io/ucsd-its-sd/snowbot3:latest`, where `config/` contains a file `config/config.json` with at least
+To run the bot, execute `docker run --name snowbot3 -v ./config:/home/snowbot/config --rm ghcr.io/ucsd-its-sd/snowbot3:latest`, where `config/` contains a file `config/config.json` with at least
 
 ```json
 {
