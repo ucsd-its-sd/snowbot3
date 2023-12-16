@@ -11,14 +11,14 @@ export class SnowCommand extends Command {
         !snow does not care what its argument looks like, \
         so use it if you have a strange looking ticket.";
 
-  execute(msg: Message, match: CommandMatch): void {
+  async execute(msg: Message, match: CommandMatch): Promise<void> {
     const ticket = match.groups.ticket ?? match.groups.arg;
     const ticketUrl = `https://support.ucsd.edu/nav_to.do?uri=task.do?sysparm_query=number=${ticket}`;
     const ticketEmbed = new EmbedBuilder().setDescription(
       `[Ticket ${ticket.toUpperCase()}](${ticketUrl})`,
     );
 
-    msg.channel.send({ embeds: [ticketEmbed] });
+    await msg.channel.send({ embeds: [ticketEmbed] });
   }
 }
 
@@ -30,7 +30,7 @@ export class KnowledgeBaseCommand extends Command {
         after the command (on the same line), \
         then sends a link to the results.";
 
-  execute(msg: Message, match: CommandMatch): void {
+  async execute(msg: Message, match: CommandMatch): Promise<void> {
     const args = encodeURI(match.groups.search);
     const kbUrl = `https://support.ucsd.edu/its?id=search&spa=1&q=${args}`;
     const kbEmbed = new EmbedBuilder().setDescription(
@@ -49,14 +49,14 @@ export class CollabCommand extends Command {
         after the command (on the same line), \
         then sends a link to the results.";
 
-  execute(msg: Message, match: CommandMatch): void {
+  async execute(msg: Message, match: CommandMatch): Promise<void> {
     const args = encodeURI(match.groups.search);
     const collabUrl = `https://ucsdcollab.atlassian.net/wiki/search?spaces=CKB&text=${args}`;
     const collabEmbed = new EmbedBuilder().setDescription(
       `[Collab Search Results](${collabUrl})`,
     );
 
-    msg.channel.send({ embeds: [collabEmbed] });
+    await msg.channel.send({ embeds: [collabEmbed] });
   }
 }
 
@@ -65,14 +65,14 @@ export class MailUpdCommand extends Command {
   name = "!p <username>";
   description = "Posts a link to a user's MailUPD page";
 
-  execute(msg: Message, match: CommandMatch): void {
+  async execute(msg: Message, match: CommandMatch): Promise<void> {
     const user = match.groups.user.toLowerCase();
     const mailUpdUrl = `https://mailupd.ucsd.edu/view?id=${user}`;
     const mailUpdEmbed = new EmbedBuilder().setDescription(
       `[MailUPD page for ${user}](${mailUpdUrl})`,
     );
 
-    msg.channel.send({ embeds: [mailUpdEmbed] });
+    await msg.channel.send({ embeds: [mailUpdEmbed] });
   }
 }
 
@@ -81,13 +81,13 @@ export class SalCommand extends Command {
   name = "!sal <PID>";
   description = "Posts a link to a user's SAL page";
 
-  execute(msg: Message, match: CommandMatch): void {
+  async execute(msg: Message, match: CommandMatch): Promise<void> {
     const pid = match.groups.pid.toLowerCase();
     const salUrl = `https://sal.ucsd.edu/students/${pid}`;
     const salEmbed = new EmbedBuilder().setDescription(
       `[SAL page for ${pid}](${salUrl})`,
     );
 
-    msg.channel.send({ embeds: [salEmbed] });
+    await msg.channel.send({ embeds: [salEmbed] });
   }
 }

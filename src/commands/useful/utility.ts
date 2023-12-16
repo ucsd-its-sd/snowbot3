@@ -1,13 +1,13 @@
 import { Message, EmbedBuilder } from "discord.js";
-import { Command, CommandMatch } from "../../lib/command";
+import { Command } from "../../lib/command";
 
 export class ListCommand extends Command {
   regex = /!(ls|list)/;
   name = "!ls or !list";
   description = "Sends a small help menu with useful links and phone numbers.";
 
-  execute(msg: Message, match: CommandMatch): void {
-    msg.channel.send({ embeds: [this.cheatsheet] });
+  async execute(msg: Message): Promise<void> {
+    await msg.channel.send({ embeds: [this.cheatsheet] });
   }
 
   cheatsheet = new EmbedBuilder()

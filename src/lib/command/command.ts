@@ -34,13 +34,13 @@ export abstract class Command {
     msg: Message,
     match: CommandMatch,
     state: IStateContainer<State>,
-  ): void;
+  ): Promise<void>;
 
   /**
    * A function to be called once at start-up to initialize the command.
    * @param state The state container.
    */
-  initialize(state: IStateContainer<State>): void {}
+  async initialize(state: IStateContainer<State>): Promise<void> {}
 }
 
 /**

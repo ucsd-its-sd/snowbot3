@@ -1,13 +1,13 @@
 import { PathLike, readFileSync } from "fs";
 import * as fs from "fs/promises";
 
-export type IStateContainer<T> = {
+export interface IStateContainer<T> {
   /** Gets the current state. */
-  read(): T;
+  read(): Promise<T>;
 
   /** Updates the state. */
-  write(state: T): void;
-};
+  write(state: T): Promise<void>;
+}
 
 export class JSONStateContainer<T> implements IStateContainer<T> {
   private readonly file: PathLike;
@@ -26,15 +26,11 @@ export class JSONStateContainer<T> implements IStateContainer<T> {
     this.init();
   }
 
-  read(): T {
+  async read(): Promise<T> {
     return this.state;
   }
 
-  write(state: T): void {
-    this.writeImpl(state);
-  }
-
-  private async writeImpl(state: T): Promise<void> {
+  async write(state: T): Promise<void> {
     const backup = `${this.file}.bak`;
     const jsonStr = JSON.stringify(state, undefined, 4);
     try {
@@ -57,7 +53,10 @@ export class JSONStateContainer<T> implements IStateContainer<T> {
 
       // Every time we get a new event, re-read the file.
       for await (const e of watcher) {
-        await this.update();
+        this.state = await fs
+          .readFile(this.file, "utf-8")
+          .then(JSON.parse)
+          .then((x) => x as T);
       }
     } catch (err) {
       // This isn't used at the moment but I've left it in
@@ -71,13 +70,5 @@ export class JSONStateContainer<T> implements IStateContainer<T> {
       // Clean up after ourselves by ending the watch.
       ac.abort();
     }
-  }
-
-  private async update(): Promise<void> {
-    // Read the file, parse it, and convert it.
-    this.state = await fs
-      .readFile(this.file, "utf-8")
-      .then(JSON.parse)
-      .then((x) => x as T);
   }
 }

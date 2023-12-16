@@ -4,37 +4,41 @@ import { State, JSONStateContainer } from "./lib/state";
 import { LessUsefulCommandModule, UsefulCommandModule } from "./commands";
 import { LeadModule as LeadCommandModule } from "./commands/lead";
 
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-  ],
-});
+async function begin() {
+  const client = new Client({
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.MessageContent,
+    ],
+  });
 
-// Security-wise, we really shouldn't be keeping the token with the state
-// since it is read by every command, and it is possible we could leak it
-// if we were to accidentally create a command that can access arbitrary state.
-// I've decided that since this is an internal tool and its very easy to reset
-// the token, this is acceptable, but there are many better ways to do this.
-const state = new JSONStateContainer<State>("./config/config.json");
+  // Security-wise, we really shouldn't be keeping the token with the state
+  // since it is read by every command, and it is possible we could leak it
+  // if we were to accidentally create a command that can access arbitrary state.
+  // I've decided that since this is an internal tool and its very easy to reset
+  // the token, this is acceptable, but there are many better ways to do this.
+  const state = new JSONStateContainer<State>("./config/config.json");
 
-// Create this first to get the phonebook from it
-const lead = new LeadCommandModule();
+  // Create this first to get the phonebook from it
+  const lead = new LeadCommandModule();
 
-const handler = new CommandHandler(state, [
-  new UsefulCommandModule(),
-  new LessUsefulCommandModule(),
-  lead,
-  lead.phonebook,
-]);
+  const handler = await CommandHandler.create(state, [
+    new UsefulCommandModule(),
+    new LessUsefulCommandModule(),
+    lead,
+    lead.phonebook,
+  ]);
 
-client.on(Events.ClientReady, () => {
-  console.log(`Successfully logged in as ${client.user!.tag}`);
-});
+  client.on(Events.ClientReady, () => {
+    console.log(`Successfully logged in as ${client.user!.tag}`);
+  });
 
-// We have to bind to handler, because otherwise it becomes bound to client :(
-client.on(Events.MessageCreate, handler.execute.bind(handler));
+  // We have to bind to handler, because otherwise it becomes bound to client :(
+  client.on(Events.MessageCreate, handler.execute.bind(handler));
 
-// Login with the token from the state
-client.login(state.read().token);
+  // Login with the token from the state
+  client.login((await state.read()).token);
+}
+
+begin();

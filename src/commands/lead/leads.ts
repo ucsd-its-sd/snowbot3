@@ -8,7 +8,11 @@ export class AddLeadCommand extends Command {
   name = "!lead add <ping> <name>";
   description = "Adds a lead, and sets them up for !fired.";
 
-  execute(msg: Message, match: CommandMatch, state: IStateContainer<State>) {
+  async execute(
+    msg: Message,
+    match: CommandMatch,
+    state: IStateContainer<State>,
+  ): Promise<void> {
     if (!isAdmin(msg)) {
       return;
     }
@@ -16,11 +20,11 @@ export class AddLeadCommand extends Command {
     // Destructure to get all relevant groups.
     const { ping, name } = match.groups;
 
-    const currState = state.read();
+    const currState = await state.read();
 
     // Don't add if they already exist.
     if (currState.leads.find((lead) => lead.ping == ping)) {
-      msg.channel.send(`${ping} is already a lead.`);
+      await msg.channel.send(`${ping} is already a lead.`);
       return;
     }
 
@@ -29,9 +33,9 @@ export class AddLeadCommand extends Command {
 
     // Push new lead
     currState.leads.push(lead);
-    state.write(currState);
+    await state.write(currState);
 
-    msg.react("👍");
+    await msg.react("👍");
   }
 }
 
@@ -45,34 +49,38 @@ export class EmoteLeadCommand extends Command {
     super();
   }
 
-  execute(msg: Message, match: CommandMatch, state: IStateContainer<State>) {
+  async execute(
+    msg: Message,
+    match: CommandMatch,
+    state: IStateContainer<State>,
+  ): Promise<void> {
     const { ping, emote, emote_name } = match.groups;
 
     if (!isAdmin(msg) && msg.author.toString() != ping) {
       return;
     }
 
-    const currState = state.read();
+    const currState = await state.read();
 
     // Save some time by saving the index.
     const lead_ind = currState.leads.findIndex((lead) => lead.ping == ping);
 
     // If the index doesn't exist, can't edit.
     if (lead_ind == -1) {
-      msg.channel.send(`${ping} is not a lead.`);
+      await msg.channel.send(`${ping} is not a lead.`);
       return;
     }
 
     // If the emote is already taken, don't add it.
     if (currState.leads.find((lead) => lead.emote == emote)) {
-      msg.channel.send(`${emote} is already in use.`);
+      await msg.channel.send(`${emote} is already in use.`);
       return;
     }
 
     // Push new lead
     currState.leads[lead_ind].emote = emote;
     currState.leads[lead_ind].emoteName = emote_name;
-    state.write(currState);
+    await state.write(currState);
 
     // Add to the dictionary.
     this.phonebook.emojiList[ping] = generateEmojiCommand(
@@ -80,7 +88,7 @@ export class EmoteLeadCommand extends Command {
     )!;
     this.phonebook.dispatchEvent(rebuildEvent);
 
-    msg.react(emote);
+    await msg.react(emote);
   }
 }
 
@@ -94,14 +102,18 @@ export class RemoveLeadCommand extends Command {
     super();
   }
 
-  execute(msg: Message, match: CommandMatch, state: IStateContainer<State>) {
+  async execute(
+    msg: Message,
+    match: CommandMatch,
+    state: IStateContainer<State>,
+  ): Promise<void> {
     if (!isAdmin(msg)) {
       return;
     }
 
     const ping = match.groups.ping;
 
-    const currState = state.read();
+    const currState = await state.read();
 
     // Remove the old emoji from the dictionary.
     delete this.phonebook.emojiList[ping];
@@ -112,7 +124,7 @@ export class RemoveLeadCommand extends Command {
 
     // If the index doesn't exist, can't edit.
     if (lead == -1) {
-      msg.channel.send(`${ping} is not a lead.`);
+      await msg.channel.send(`${ping} is not a lead.`);
       return;
     }
 
@@ -121,9 +133,9 @@ export class RemoveLeadCommand extends Command {
 
     // Remove the lead at this index.
     currState.leads.splice(lead, 1);
-    state.write(currState);
+    await state.write(currState);
 
-    msg.react(emote ?? "👍");
+    await msg.react(emote ?? "👍");
   }
 }
 
@@ -132,7 +144,11 @@ export class FireableLeadCommand extends Command {
   name = "!lead fireable <ping> <canFire>";
   description = "Sets whether a lead is fireable (true or false).";
 
-  execute(msg: Message, match: CommandMatch, state: IStateContainer<State>) {
+  async execute(
+    msg: Message,
+    match: CommandMatch,
+    state: IStateContainer<State>,
+  ): Promise<void> {
     const { ping } = match.groups;
 
     if (!isAdmin(msg) && msg.author.toString() != ping) {
@@ -142,22 +158,22 @@ export class FireableLeadCommand extends Command {
     // If they are not fireable, dontFire is true.
     const dontFire = match.groups.bool == "false";
 
-    const currState = state.read();
+    const currState = await state.read();
 
     // Save some time by saving the index.
     const lead = currState.leads.findIndex((lead) => lead.ping == ping);
 
     // If the index doesn't exist, can't edit.
     if (lead == -1) {
-      msg.channel.send(`${match.groups.ping} is not a lead.`);
+      await msg.channel.send(`${match.groups.ping} is not a lead.`);
       return;
     }
 
     // Set their fireability explicitly.
     currState.leads[lead].dontFire = dontFire;
-    state.write(currState);
+    await state.write(currState);
 
-    msg.react(currState.leads[lead].emote ?? "👍");
+    await msg.react(currState.leads[lead].emote ?? "👍");
   }
 }
 
@@ -172,19 +188,23 @@ export class RebuildLeadCommand extends Command {
     super();
   }
 
-  initialize(state: IStateContainer<State>): void {
-    this.phonebook.emojiList = generateEmojis(state.read().leads);
+  async initialize(state: IStateContainer<State>): Promise<void> {
+    this.phonebook.emojiList = generateEmojis((await state.read()).leads);
   }
 
-  execute(msg: Message, match: CommandMatch, state: IStateContainer<State>) {
+  async execute(
+    msg: Message,
+    match: CommandMatch,
+    state: IStateContainer<State>,
+  ): Promise<void> {
     if (!isAdmin(msg)) {
       return;
     }
 
-    this.phonebook.emojiList = generateEmojis(state.read().leads);
+    this.phonebook.emojiList = generateEmojis((await state.read()).leads);
     this.phonebook.dispatchEvent(rebuildEvent);
 
-    msg.channel.send("Rebuilt");
+    await msg.channel.send("Rebuilt");
   }
 }
 
@@ -206,10 +226,10 @@ function generateEmojiCommand(lead: Lead): Command | undefined {
     regex: new RegExp(lead.emote),
     name: lead.emote,
     description: `${lead.emoteName} dials ${lead.name}`,
-    execute(msg: Message) {
-      msg.channel.send(lead.ping);
+    async execute(msg: Message) {
+      await msg.channel.send(lead.ping);
     },
-    initialize() {},
+    async initialize() {},
   };
 }
 

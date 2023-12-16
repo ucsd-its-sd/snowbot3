@@ -12,18 +12,9 @@ export class CommandHandler {
 
   private combinedRegex: RegExp;
 
-  constructor(state: IStateContainer<State>, modules: CommandModule[]) {
+  private constructor(state: IStateContainer<State>, modules: CommandModule[]) {
     this.state = state;
     this.modules = modules;
-
-    // Subscribe to each module's rebuild event.
-    for (const module of modules) {
-      module.addEventListener("rebuild", this.onRebuild.bind(this));
-
-      for (const command of module.commands) {
-        command.initialize(state);
-      }
-    }
 
     // Initialize help commands.
     this.helpCommands = modules.map((m) => this.generateHelpCommand(m));
@@ -32,7 +23,26 @@ export class CommandHandler {
     this.combinedRegex = this.buildRegex();
   }
 
-  execute(msg: Message): void {
+  public static async create(
+    state: IStateContainer<State>,
+    modules: CommandModule[],
+  ): Promise<CommandHandler> {
+    // Initialize all commands.
+    for (const module of modules) {
+      for (const command of module.commands) {
+        await command.initialize(state);
+      }
+    }
+
+    // Subscribe to each module's rebuild event.
+    const handler = new CommandHandler(state, modules);
+    const rebuild = handler.onRebuild.bind(handler);
+    handler.modules.forEach((m) => m.addEventListener("rebuild", rebuild));
+
+    return handler;
+  }
+
+  async execute(msg: Message): Promise<void> {
     if (msg.author.bot) return;
 
     let matches = msg.content.matchAll(this.combinedRegex);
@@ -66,7 +76,7 @@ export class CommandHandler {
         ci == 0 ? this.helpCommands[mi]! : this.modules[mi].commands[ci - 1];
 
       // Run the matched command
-      command.execute(msg, commandMatch, this.state);
+      await command.execute(msg, commandMatch, this.state);
     }
   }
 
@@ -95,7 +105,7 @@ export class CommandHandler {
     return {
       name: module.helpCommand,
       regex: new RegExp(module.helpCommand),
-      execute: (msg) => {
+      execute: async (msg) => {
         const helpFields: APIEmbedField[] = module.commands.map((c) => ({
           name: c.name,
           value: c.description ?? "",
@@ -108,7 +118,7 @@ export class CommandHandler {
 
         msg.channel.send({ embeds: [helpEmbed] });
       },
-      initialize: () => {},
+      initialize: async () => {},
     };
   }
 
