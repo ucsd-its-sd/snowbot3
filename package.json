@@ -1,14 +1,25 @@
 {
   "name": "snowbot3",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Third incarnation of SNOWbot, basically the same but not on my Discord account :)",
-  "main": "snowbot.js",
+  "main": "dist/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "clean": "tsc --build --clean",
+    "start": "node dist/main.js"
   },
-  "author": "Jim Villani",
+  "contributors": [
+    "Jim Villani",
+    "Aedan Bailey",
+    "Ari Stassinopoulos <hello@ari-s.com> (https://ari-s.com)",
+    "Kevin Fisher <kfish610@gmail.com> (https://github.com/kfish610)"
+  ],
   "license": "ISC",
   "dependencies": {
     "discord.js": "^14.13.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.1.0",
+    "typescript": "^5.3.2"
   }
 }

@@ -1,18 +1,14 @@
 # syntax=docker/dockerfile:1
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/engine/reference/builder/
+ARG NODE_VERSION=20.9.0
 
-ARG NODE_VERSION=20.5.1
+FROM node:${NODE_VERSION}-bullseye-slim as base
 
-FROM node:${NODE_VERSION}-alpine
+# Needed to have the package show up in GitHub
+LABEL org.opencontainers.image.source=https://github.com/ucsd-its-sd/snowbot3
 
-# Use production node environment by default.
-ENV NODE_ENV production
-
-
-WORKDIR /usr/src/app
+# For cleanliness
+WORKDIR /home/snowbot
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
@@ -21,16 +17,16 @@ WORKDIR /usr/src/app
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
+    npm ci
 
-# Run the application as a non-root user.
-USER node
+# Build the application, binding the required files.
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
+    --mount=type=bind,source=src/,target=src/ \
+    npm run build
 
-# Copy the rest of the source files into the image.
-COPY . .
-
-# Expose the port that the application listens on.
-EXPOSE 443
+COPY ./entry.sh /home/snowbot/entry.sh
 
 # Run the application.
-CMD node snowbot.js
+ENTRYPOINT [ "/home/snowbot/entry.sh" ]
