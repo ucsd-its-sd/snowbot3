@@ -1,6 +1,6 @@
-import { PermissionFlagsBits, type Message } from "discord.js";
+import { PermissionFlagsBits, Message, UserMention } from "discord.js";
 import { Command, CommandMatch, rebuildEvent } from "../../lib/command";
-import type { Lead, State, IStateContainer } from "../../lib/state";
+import { Lead, State, IStateContainer } from "../../lib/state";
 import { Phonebook } from ".";
 
 export class AddLeadCommand extends Command {
@@ -29,7 +29,7 @@ export class AddLeadCommand extends Command {
     }
 
     // Use name punning to create the lead.
-    const lead: Lead = { name, ping };
+    const lead: Lead = { name, ping: ping as UserMention };
 
     // Push new lead
     currState.leads.push(lead);
