@@ -45,7 +45,9 @@ export class CommandHandler {
   async execute(msg: Message): Promise<void> {
     if (msg.author.bot) return;
 
-    let matches = msg.content.matchAll(this.combinedRegex);
+    let dedupSpaces = msg.content.replaceAll(/s+/, " ");
+
+    let matches = dedupSpaces.matchAll(this.combinedRegex);
     // For every matched command:
     for (let match of matches) {
       // Get all groups that are not undefined (i.e. only the alternation that matched)
