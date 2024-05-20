@@ -12,7 +12,7 @@ export class Phonebook extends CommandModule {
   helpTitle = "Phonebook";
 }
 
-export class LeadModule extends CommandModule {
+export class LeadCommandModule extends CommandModule {
   private _phonebook: Phonebook = new Phonebook();
   phonebook: CommandModule = this._phonebook;
 
