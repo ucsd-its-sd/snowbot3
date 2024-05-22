@@ -65,6 +65,7 @@ export class EmoteLeadCommand extends Command {
       await msg.guild?.emojis.fetch(emote_id);
     } catch (e) {
       await msg.channel.send(`${emote_name} is not in this server.`);
+      return;
     }
 
     const currState = await state.read();

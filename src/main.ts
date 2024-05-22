@@ -40,7 +40,15 @@ async function begin() {
   });
 
   // We have to bind to handler, because otherwise it becomes bound to client :(
-  client.on(Events.MessageCreate, handler.execute.bind(handler));
+  client.on(Events.MessageCreate, (msg) =>
+    handler
+      .execute(msg)
+      .catch((err) =>
+        console.error(
+          `In message "${msg.content}", encountered the following error: ${err}`,
+        ),
+      ),
+  );
 
   // Login with the token from the state
   client.login((await state.read()).token);
