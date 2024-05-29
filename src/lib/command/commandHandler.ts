@@ -45,7 +45,7 @@ export class CommandHandler {
   async execute(msg: Message): Promise<void> {
     if (msg.author.bot) return;
 
-    let dedupSpaces = msg.content.replaceAll(/s+/g, " ");
+    let dedupSpaces = msg.content.replaceAll(/\s+/g, " ");
 
     let matches = dedupSpaces.matchAll(this.combinedRegex);
     // For every matched command:
