@@ -40,7 +40,8 @@ export class AddLeadCommand extends Command {
 }
 
 export class EmoteLeadCommand extends Command {
-  regex = /^!lead emote (?<ping><@\d+>) (?<emote><(?<emote_name>:\w+:)\d+>)?$/;
+  regex =
+    /^!lead emote (?<ping><@\d+>) (?<emote><a?(?<emote_name>:\w+:)(?<emote_id>\d+)>)?$/;
   name = "!lead emote <ping> <emote>";
   description = "Adds a lead, and sets them up with an emote and for !fired.";
 
@@ -54,9 +55,16 @@ export class EmoteLeadCommand extends Command {
     match: CommandMatch,
     state: IStateContainer<State>,
   ): Promise<void> {
-    const { ping, emote, emote_name } = match.groups;
+    const { ping, emote, emote_name, emote_id } = match.groups;
 
     if (!isAdmin(msg) && msg.author.toString() != ping) {
+      return;
+    }
+
+    try {
+      await msg.guild?.emojis.fetch(emote_id);
+    } catch (e) {
+      await msg.channel.send(`${emote_name} is not in this server.`);
       return;
     }
 

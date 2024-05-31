@@ -1,8 +1,12 @@
 import { Client, GatewayIntentBits, Events } from "discord.js";
 import { CommandHandler } from "./lib/command";
 import { State, JSONStateContainer } from "./lib/state";
-import { LessUsefulCommandModule, UsefulCommandModule } from "./commands";
-import { LeadModule as LeadCommandModule } from "./commands/lead";
+import {
+  LessUsefulCommandModule,
+  UsefulCommandModule,
+  LeadCommandModule,
+  BackupCommandModule,
+} from "./commands";
 
 async function begin() {
   const client = new Client({
@@ -28,6 +32,7 @@ async function begin() {
     new LessUsefulCommandModule(),
     lead,
     lead.phonebook,
+    new BackupCommandModule(),
   ]);
 
   client.on(Events.ClientReady, () => {
@@ -35,7 +40,15 @@ async function begin() {
   });
 
   // We have to bind to handler, because otherwise it becomes bound to client :(
-  client.on(Events.MessageCreate, handler.execute.bind(handler));
+  client.on(Events.MessageCreate, (msg) =>
+    handler
+      .execute(msg)
+      .catch((err) =>
+        console.error(
+          `In message "${msg.content}", encountered the following error: ${err}`,
+        ),
+      ),
+  );
 
   // Login with the token from the state
   client.login((await state.read()).token);

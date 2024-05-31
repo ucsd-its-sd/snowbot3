@@ -8,6 +8,6 @@ export class LessUsefulCommandModule extends CommandModule {
     new CallResponseCommand("!ping", "pong"),
     new CallResponseCommand("!sleep", "go to bed"),
     new CallResponseCommand("!aloha", "World class customer service!"),
-    new CallResponseCommand("fuck|shit|\bass\b|bitch", "LANGUAGE"),
+    new CallResponseCommand("fuck|shit|\\bass\\b|bitch", "LANGUAGE"),
   ];
 }
