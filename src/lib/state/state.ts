@@ -1,11 +1,11 @@
-import { UserMention } from "discord.js";
+import { Snowflake, UserMention } from "discord.js";
 
 export interface State {
   token: string;
 
   leads: Lead[];
 
-  whenIWork: WhenIWork;
+  whenIWork: WhenIWorkState;
 }
 
 export interface Lead {
@@ -24,7 +24,7 @@ export interface Lead {
   dontFire?: boolean;
 }
 
-export interface WhenIWork {
+export interface WhenIWorkState {
   /** The user's token; needs to be refreshed once every 7 days. */
   token: string;
 
@@ -32,11 +32,15 @@ export interface WhenIWork {
   iat: Date;
 
   /** Dictionary of user IDs to users. */
-  userDict: Record<number, WhenIWorkUser>;
+  userDict: Map<number, WhenIWorkUser>;
 }
 
 export interface WhenIWorkUser {
   email: string;
 
-  ping: UserMention;
+  snowflake: Snowflake;
+
+  scheduled: boolean;
+
+  punched: boolean;
 }
