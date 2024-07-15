@@ -29,7 +29,7 @@ export interface WhenIWorkState {
   token: string;
 
   /** Time token issued at. */
-  iat: Date;
+  iat: number;
 
   /** Dictionary of user IDs to users. */
   userDict: Map<number, WhenIWorkUser>;

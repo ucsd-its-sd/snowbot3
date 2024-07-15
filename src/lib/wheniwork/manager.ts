@@ -2,6 +2,7 @@ import { Guild, Role } from "discord.js";
 import { IStateContainer, State } from "../state";
 
 import { setTimeout } from "timers/promises";
+import { Shifts } from "./shifts";
 
 type Day = [number, number, number];
 type Time = [number, number];
@@ -13,12 +14,14 @@ export class WhenIWorkManager {
   today: Day = undefined!;
   currTime: Time = [0, 0];
 
-  onShift: Set<number> = new Set();
+  // TODO: Temporary until es2024 support
+  onShift: Set<number> & { difference(other: Set<number>): Set<number> } =
+    new Set() as Set<number> & { difference(other: Set<number>): Set<number> };
 
   private guild: Guild;
   private state: IStateContainer<State>;
 
-  private onShiftRole: Role = undefined!;
+  private roles: Record<string, Role> = {}!;
 
   constructor(guild: Guild, state: IStateContainer<State>) {
     this.guild = guild;
@@ -29,7 +32,14 @@ export class WhenIWorkManager {
     const currState = await this.state.read();
 
     let allRoles = await this.guild.roles.fetch();
-    this.onShiftRole = allRoles.find((role) => role.name == "On Shift")!;
+    this.roles.onShift = allRoles.find((role) => role.name == "On Shift")!;
+    this.roles.frontDesk = allRoles.find(
+      (role) => role.name == "Front Desk On Shift",
+    )!;
+    this.roles.classroom = allRoles.find(
+      (role) => role.name == "Classroom On Shift",
+    )!;
+    this.roles.leads = allRoles.find((role) => role.name == "Leads On Shift")!;
 
     // Set up the onShift set to mirror the current state
     for (let [id, user] of currState.whenIWork.userDict) {
@@ -99,7 +109,9 @@ export class WhenIWorkManager {
     if (this.currTime == this.closingTime) {
       // Remove the On Shift role from each user
       for (let id of this.onShift) {
-        let snowflake = currState.whenIWork.userDict.get(id)!.snowflake;
+        let snowflake = currState.whenIWork.userDict.get(id)?.snowflake;
+
+        if (!snowflake) continue;
 
         let member = await this.guild.members.fetch(snowflake);
 
@@ -109,9 +121,71 @@ export class WhenIWorkManager {
       // Clear the set, as no one is on shift anymore
       this.onShift.clear();
     } else {
-      // Query to
-      // https://api.wheniwork.com/2/shifts?start=${currTime[0]}:${currTime[1]}&end=${currTime[0]}:${currTime[1]+1}
-      // to get the list of users on shift
+      // Request shifts at current time
+      // (one minute added to end to prevent it from complaining)
+      let req: RequestInit = {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${currState.whenIWork.token}`,
+        },
+      };
+      let res = await fetch(
+        `https://api.wheniwork.com/2/shifts?\
+        start=${this.currTime[0]}:${this.currTime[1]}&\
+        end=${this.currTime[0]}:${this.currTime[1] + 1}`,
+        req,
+      );
+
+      // Check if request succeeded
+      if (!res.ok) {
+        console.error("Failed to get shifts");
+        return;
+      }
+
+      // If we successfully got shifts, update the on-shift set
+      let data: Shifts = await res.json();
+
+      let currOnShift = new Set<number>();
+
+      for (let shift of data.shifts) {
+        currOnShift.add(shift.user_id);
+
+        if (this.onShift.has(shift.user_id)) continue;
+
+        let user = currState.whenIWork.userDict.get(shift.user_id);
+
+        if (user) {
+          user.scheduled = true;
+
+          let member = await this.guild.members.fetch(user.snowflake);
+
+          await member.roles.add(this.onShiftRole);
+        }
+      }
+
+      let offShift = this.onShift.difference(currOnShift);
+
+      for (let id of offShift) {
+        let user = currState.whenIWork.userDict.get(id);
+
+        if (user) {
+          user.scheduled = false;
+
+          if (!user.punched) {
+            let member = await this.guild.members.fetch(user.snowflake);
+
+            await member.roles.remove(this.onShiftRole);
+          }
+        }
+      }
+
+      // TODO: Temporary until es2024 support
+      this.onShift = currOnShift as Set<number> & {
+        difference(other: Set<number>): Set<number>;
+      };
+
+      // Write the updated state
+      await this.state.write(currState);
     }
   }
 
@@ -121,6 +195,9 @@ export class WhenIWorkManager {
       const tmrw = new Date(Date.now() + 24 * 60 * 60 * 1000);
       this.today = [tmrw.getFullYear(), tmrw.getMonth(), tmrw.getDate()];
       this.currTime = this.openingTime;
+
+      // Check if we have to update the token (we want to do this at least once a day)
+      this.updateToken();
     } else if (this.currTime[1] == 45) {
       // If we're at X:45, set the next time to X+1:00
       this.currTime[0]++;
@@ -133,5 +210,33 @@ export class WhenIWorkManager {
     // Calculate millis until the next time, then return
     let nextDate = new Date(...this.today, ...this.currTime);
     return nextDate.getTime() - Date.now();
+  }
+
+  private async updateToken(): Promise<void> {
+    const currState = await this.state.read();
+    let timeSinceIssue = Date.now() - currState.whenIWork.iat;
+
+    // 2 days before expiration, according to When I Work
+    if (timeSinceIssue > 5 * 24 * 60 * 60 * 1000) {
+      let req: RequestInit = {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${currState.whenIWork.token}`,
+        },
+      };
+      let res = await fetch("https://api.wheniwork.com/2/refresh", req);
+
+      // Check if request succeeded
+      if (!res.ok) {
+        console.error("Failed to refresh token");
+        return;
+      }
+
+      // If we successfully refreshed, replace the token and issue time
+      let data = await res.json();
+      currState.whenIWork.token = data.token;
+      currState.whenIWork.iat = Date.now();
+      await this.state.write(currState);
+    }
   }
 }

@@ -1,4 +1,8 @@
-export interface Shifts {}
+export interface Shifts {
+  shifts: Shift[];
+  users: User[];
+  positions: Position[];
+}
 
 export interface Shift {
   user_id: number;
