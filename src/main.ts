@@ -8,6 +8,7 @@ import {
   BackupCommandModule,
   WhenIWorkCommandModule,
 } from "./commands";
+import { WhenIWorkManager } from "./lib/wheniwork/manager";
 
 async function begin() {
   const client = new Client({
@@ -24,6 +25,14 @@ async function begin() {
   // I've decided that since this is an internal tool and its very easy to reset
   // the token, this is acceptable, but there are many better ways to do this.
   const state = new JSONStateContainer<State>("./config/config.json");
+
+  const serviceDeskGuild = await client.guilds.fetch("759484837366857748");
+  const wiwManager = new WhenIWorkManager(serviceDeskGuild, state);
+  wiwManager
+    .begin()
+    .catch((err) =>
+      console.error(`Encountered error in When I Work Manager: ${err}`),
+    );
 
   // Create this first to get the phonebook from it
   const lead = new LeadCommandModule();
