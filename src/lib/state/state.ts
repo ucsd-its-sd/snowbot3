@@ -1,4 +1,4 @@
-import { Snowflake, UserMention } from "discord.js";
+import { UserMention } from "discord.js";
 
 export interface State {
   token: string;
@@ -32,13 +32,13 @@ export interface WhenIWorkState {
   iat: number;
 
   /** Dictionary of user IDs to users. */
-  userDict: Map<number, WhenIWorkUser>;
+  userDict: Record<string, WhenIWorkUser>;
 }
 
 export interface WhenIWorkUser {
   email: string;
 
-  snowflake: Snowflake;
+  ping: UserMention;
 
   scheduled: boolean;
 

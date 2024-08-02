@@ -1,11 +1,15 @@
-import { Guild, Role } from "discord.js";
-import { IStateContainer, State } from "../state";
-
+import { Guild, RoleResolvable, Snowflake } from "discord.js";
 import { setTimeout } from "timers/promises";
+
+import jwt from "jsonwebtoken";
+
+import { IStateContainer, State } from "../state";
 import { Shifts } from "./shifts";
 
 type Day = [number, number, number];
 type Time = [number, number];
+
+type Role = "On Shift" | "Leads" | "Front Desk" | "Classroom";
 
 export class WhenIWorkManager {
   readonly openingTime: Time = [6, 45];
@@ -14,14 +18,19 @@ export class WhenIWorkManager {
   today: Day = undefined!;
   currTime: Time = [0, 0];
 
-  // TODO: Temporary until es2024 support
-  onShift: Set<number> & { difference(other: Set<number>): Set<number> } =
-    new Set() as Set<number> & { difference(other: Set<number>): Set<number> };
+  // Map from user id to shift list
+  roles: Record<string, Role[]> = {};
+
+  // Map from shift name to role id
+  private readonly roleToId: Record<Role, Snowflake> = {
+    "On Shift": "1263611460630614036",
+    Leads: "1263611472513208401",
+    "Front Desk": "1263611467257610241",
+    Classroom: "1263611469803552957",
+  };
 
   private guild: Guild;
   private state: IStateContainer<State>;
-
-  private roles: Record<string, Role> = {}!;
 
   constructor(guild: Guild, state: IStateContainer<State>) {
     this.guild = guild;
@@ -31,19 +40,13 @@ export class WhenIWorkManager {
   async begin(): Promise<void> {
     const currState = await this.state.read();
 
-    let allRoles = await this.guild.roles.fetch();
-    this.roles.onShift = allRoles.find((role) => role.name == "On Shift")!;
-    this.roles.frontDesk = allRoles.find(
-      (role) => role.name == "Front Desk On Shift",
-    )!;
-    this.roles.classroom = allRoles.find(
-      (role) => role.name == "Classroom On Shift",
-    )!;
-    this.roles.leads = allRoles.find((role) => role.name == "Leads On Shift")!;
+    // Mark those who were saved as on shift so we can remove their lingering roles
+    for (let id in currState.whenIWork.userDict) {
+      let user = currState.whenIWork.userDict[id];
 
-    // Set up the onShift set to mirror the current state
-    for (let [id, user] of currState.whenIWork.userDict) {
-      if (user.scheduled || user.punched) this.onShift.add(id);
+      if (user && (user.scheduled || user.punched)) {
+        this.roles[id] = [];
+      }
     }
 
     // Initialize state and get the time to wait
@@ -106,22 +109,24 @@ export class WhenIWorkManager {
   private async updateStatus(): Promise<void> {
     let currState = await this.state.read();
 
+    // Check if we're closed, if we are clear everything
     if (this.currTime == this.closingTime) {
-      // Remove the On Shift role from each user
-      for (let id of this.onShift) {
-        let snowflake = currState.whenIWork.userDict.get(id)?.snowflake;
+      // Remove all roles from each user
+      for (let id in this.roles) {
+        let ping = currState.whenIWork.userDict[id]?.ping;
 
-        if (!snowflake) continue;
+        if (!ping) continue;
 
-        let member = await this.guild.members.fetch(snowflake);
-
-        await member.roles.remove(this.onShiftRole);
+        let member = await this.guild.members.fetch(ping.slice(2, -1));
+        for (let role in this.roles[id]) {
+          await member.roles.remove(this.roles[role]);
+        }
       }
 
       // Clear the set, as no one is on shift anymore
-      this.onShift.clear();
+      this.roles = {};
     } else {
-      // Request shifts at current time
+      // Request shifts for the current time
       // (one minute added to end to prevent it from complaining)
       let req: RequestInit = {
         method: "GET",
@@ -136,53 +141,89 @@ export class WhenIWorkManager {
         req,
       );
 
-      // Check if request succeeded
+      // Check if request failed
       if (!res.ok) {
         console.error("Failed to get shifts");
         return;
       }
 
-      // If we successfully got shifts, update the on-shift set
+      // Find which position corresponds to Front Desk and Classroom
       let data: Shifts = await res.json();
+      let positionToRole: Record<number, Role> = {};
+      for (let role of ["Front Desk", "Classroom"] as Role[]) {
+        let pos = data.positions.find((pos) => pos.name.includes(role));
+        if (pos) {
+          positionToRole[pos.id] = role;
+        }
+      }
 
-      let currOnShift = new Set<number>();
-
+      // Keep track of who is currently on shift
+      let currOnShift = new Set<string>();
       for (let shift of data.shifts) {
-        currOnShift.add(shift.user_id);
+        currOnShift.add(shift.user_id.toString());
 
-        if (this.onShift.has(shift.user_id)) continue;
+        let user = currState.whenIWork.userDict[shift.user_id];
 
-        let user = currState.whenIWork.userDict.get(shift.user_id);
-
+        // If we found the user, add all the relevant roles
         if (user) {
           user.scheduled = true;
 
-          let member = await this.guild.members.fetch(user.snowflake);
+          // Get the member object from the user's snowflake
+          let member = await this.guild.members.fetch(user.ping.slice(2, -1));
 
-          await member.roles.add(this.onShiftRole);
+          // Remove any previous roles they may have had
+          // This is a little inefficient, because I'm removing On Shift
+          // just to add it again, but it's not inefficient enough to matter
+          // Since all we need is that this finishes within 15 minutes,
+          // and this will probably finish in a couple seconds.
+          // If this was blocking it might matter, but it's not so it can
+          // do other things in the meantime.
+          for (let role of this.roles[shift.user_id]) {
+            await member.roles.remove(this.roleToId[role]);
+          }
+
+          // Initialize the new roles array
+          this.roles[shift.user_id] = ["On Shift"];
+
+          // If they have a known position, include that role
+          let pos = positionToRole[shift.position_id];
+          if (pos) {
+            this.roles[shift.user_id].push(pos);
+          }
+
+          // If they're a lead, include that role
+          if (currState.leads.some((lead) => lead.ping == user.ping)) {
+            this.roles[shift.user_id].push("Leads");
+          }
+
+          // Add all the relevant roles
+          await member.roles.add(
+            this.roles[shift.user_id].map((role) => this.roleToId[role]),
+          );
         }
       }
 
-      let offShift = this.onShift.difference(currOnShift);
+      // Go through those who are already on shift and remove those who shouldn't be there
+      for (let id in this.roles) {
+        // Skip those we already dealt with
+        if (currOnShift.has(id)) continue;
 
-      for (let id of offShift) {
-        let user = currState.whenIWork.userDict.get(id);
-
+        // Check to make sure we have a user for this id
+        let user = currState.whenIWork.userDict[id];
         if (user) {
+          // Set them to no longer scheduled, since they were not on shift this cycle
           user.scheduled = false;
 
-          if (!user.punched) {
-            let member = await this.guild.members.fetch(user.snowflake);
+          // If they're still punched in, we shouldn't remove their roles just yet
+          if (user.punched) continue;
 
-            await member.roles.remove(this.onShiftRole);
+          // Remove all of the roles they were assigned
+          let member = await this.guild.members.fetch(user.ping.slice(2, -1));
+          for (let role of this.roles[id]) {
+            await member.roles.remove(this.roles[role]);
           }
         }
       }
-
-      // TODO: Temporary until es2024 support
-      this.onShift = currOnShift as Set<number> & {
-        difference(other: Set<number>): Set<number>;
-      };
 
       // Write the updated state
       await this.state.write(currState);
@@ -235,7 +276,8 @@ export class WhenIWorkManager {
       // If we successfully refreshed, replace the token and issue time
       let data = await res.json();
       currState.whenIWork.token = data.token;
-      currState.whenIWork.iat = Date.now();
+      let decoded = jwt.decode(data.token) as jwt.JwtPayload;
+      currState.whenIWork.iat = decoded.iat!;
       await this.state.write(currState);
     }
   }
