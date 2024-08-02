@@ -6,6 +6,7 @@ import {
   UsefulCommandModule,
   LeadCommandModule,
   BackupCommandModule,
+  WhenIWorkCommandModule,
 } from "./commands";
 
 async function begin() {
@@ -32,6 +33,7 @@ async function begin() {
     new LessUsefulCommandModule(),
     lead,
     lead.phonebook,
+    new WhenIWorkCommandModule(),
     new BackupCommandModule(),
   ]);
 
