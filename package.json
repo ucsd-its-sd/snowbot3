@@ -1,25 +1,27 @@
 {
-  "name": "snowbot3",
-  "version": "3.1.0",
-  "description": "Third incarnation of SNOWbot, basically the same but not on my Discord account :)",
-  "main": "dist/main.js",
-  "scripts": {
-    "build": "tsc",
-    "clean": "tsc --build --clean",
-    "start": "node dist/main.js"
-  },
-  "contributors": [
-    "Jim Villani",
-    "Aedan Bailey",
-    "Ari Stassinopoulos <hello@ari-s.com> (https://ari-s.com)",
-    "Kevin Fisher <kfish610@gmail.com> (https://github.com/kfish610)"
-  ],
-  "license": "ISC",
-  "dependencies": {
-    "discord.js": "^14.13.0"
-  },
-  "devDependencies": {
-    "prettier": "^3.1.0",
-    "typescript": "^5.3.2"
-  }
+    "name": "snowbot3",
+    "version": "3.2.0",
+    "description": "Third incarnation of SNOWbot, basically the same but not on my Discord account :)",
+    "main": "dist/main.js",
+    "scripts": {
+        "build": "tsc",
+        "clean": "tsc --build --clean",
+        "start": "node dist/main.js"
+    },
+    "contributors": [
+        "Jim Villani",
+        "Aedan Bailey",
+        "Ari Stassinopoulos <hello@ari-s.com> (https://ari-s.com)",
+        "Kevin Fisher <kfish610@gmail.com> (https://github.com/kfish610)"
+    ],
+    "license": "ISC",
+    "dependencies": {
+        "discord.js": "^14.13.0",
+        "jsonwebtoken": "^9.0.2"
+    },
+    "devDependencies": {
+        "@types/jsonwebtoken": "^9.0.6",
+        "prettier": "^3.1.0",
+        "typescript": "5.4.*"
+    }
 }

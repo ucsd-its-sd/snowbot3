@@ -1,14 +1,16 @@
 # syntax=docker/dockerfile:1
 
-ARG NODE_VERSION=20.9.0
+ARG NODE_VERSION=22.5.1
 
-FROM node:${NODE_VERSION}-bullseye-slim as base
+FROM node:${NODE_VERSION}-bullseye-slim AS base
 
 # Needed to have the package show up in GitHub
 LABEL org.opencontainers.image.source=https://github.com/ucsd-its-sd/snowbot3
 
 # For cleanliness
 WORKDIR /home/snowbot
+
+ENV TZ="America/Los_Angeles"
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
