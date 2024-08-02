@@ -57,6 +57,8 @@ export class RegisterWhenIWorkCommand extends Command {
       punched: false,
     };
 
+    await state.write(currState);
+
     msg.react("👍");
   }
 }
