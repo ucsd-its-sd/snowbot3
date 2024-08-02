@@ -54,6 +54,9 @@ export class WhenIWorkManager {
 
     // Continue forever
     while (true) {
+      console.info(
+        `Next status check in ${(millis / 1000 / 60).toPrecision(4)} minutes`,
+      );
       // Wait until the next check
       await setTimeout(millis);
 
@@ -178,7 +181,7 @@ export class WhenIWorkManager {
           // and this will probably finish in a couple seconds.
           // If this was blocking it might matter, but it's not so it can
           // do other things in the meantime.
-          for (let role of this.roles[shift.user_id]) {
+          for (let role of this.roles[shift.user_id] ?? []) {
             await member.roles.remove(this.roleToId[role]);
           }
 

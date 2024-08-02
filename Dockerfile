@@ -10,6 +10,8 @@ LABEL org.opencontainers.image.source=https://github.com/ucsd-its-sd/snowbot3
 # For cleanliness
 WORKDIR /home/snowbot
 
+ENV TZ="America/Los_Angeles"
+
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
 # Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into
