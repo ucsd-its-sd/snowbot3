@@ -26,14 +26,6 @@ async function begin() {
   // the token, this is acceptable, but there are many better ways to do this.
   const state = new JSONStateContainer<State>("./config/config.json");
 
-  const serviceDeskGuild = await client.guilds.fetch("759484837366857748");
-  const wiwManager = new WhenIWorkManager(serviceDeskGuild, state);
-  wiwManager
-    .begin()
-    .catch((err) =>
-      console.error(`Encountered error in When I Work Manager: ${err}`),
-    );
-
   // Create this first to get the phonebook from it
   const lead = new LeadCommandModule();
 
@@ -63,6 +55,15 @@ async function begin() {
 
   // Login with the token from the state
   client.login((await state.read()).token);
+
+  // Create the When I Work Manager
+  const serviceDeskGuild = await client.guilds.fetch("759484837366857748");
+  const wiwManager = new WhenIWorkManager(serviceDeskGuild, state);
+  wiwManager
+    .begin()
+    .catch((err) =>
+      console.error(`Encountered error in When I Work Manager: ${err}`),
+    );
 }
 
 begin();
