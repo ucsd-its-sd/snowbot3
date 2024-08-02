@@ -54,7 +54,7 @@ async function begin() {
   );
 
   // Login with the token from the state
-  client.login((await state.read()).token);
+  await client.login((await state.read()).token);
 
   // Create the When I Work Manager
   const serviceDeskGuild = await client.guilds.fetch("759484837366857748");
