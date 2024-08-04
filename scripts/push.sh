@@ -1,0 +1,1 @@
+docker push ghcr.io/ucsd-its-sd/snowbot3:latest

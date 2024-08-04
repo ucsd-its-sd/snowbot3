@@ -4,7 +4,7 @@
 
 This requires [the Docker engine](https://www.docker.com/products/docker-desktop/).
 
-To run the bot, execute `docker run --rm -d --name snowbot3 -v ./config:/home/snowbot/config ghcr.io/ucsd-its-sd/snowbot3:latest`, where `./config/` contains a file `config.json` with at least
+To run the bot, execute `docker run -d --name snowbot3 -v ./config:/home/snowbot/config ghcr.io/ucsd-its-sd/snowbot3:latest`, where `./config/` contains a file `config.json` with at least
 
 ```json
 {
@@ -12,7 +12,7 @@ To run the bot, execute `docker run --rm -d --name snowbot3 -v ./config:/home/sn
 }
 ```
 
-`<token>` being replaced by the bot's token.
+`<token>` being replaced by the bot's token. You may need to run `docker container rm snowbot3` first if you've run the bot before.
 
 To update the image, run `docker pull ghcr.io/ucsd-its-sd/snowbot3:latest`
 
