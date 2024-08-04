@@ -21,6 +21,11 @@ export class UsefulCommandModule extends CommandModule {
       "https://media.discordapp.net/attachments/765777043639762948/886307401106604123/GettyImages-1060490970-dcac66d9cda841638d49bc10f5dc1a8b.webp",
       "Posts the NATO alphabet",
     ),
+    new CallResponseCommand(
+      "!helper",
+      "https://chromewebstore.google.com/detail/its-helper/fgaodmdgkafbemekgfhlcfppfbafnnfe",
+      "Posts a link to the ITS Helper extension",
+    ),
   ];
 
   helpCommand = "!help";
