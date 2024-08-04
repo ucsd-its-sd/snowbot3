@@ -121,8 +121,8 @@ export class WhenIWorkManager {
         if (!ping) continue;
 
         let member = await this.guild.members.fetch(ping.slice(2, -1));
-        for (let role in this.roles[id]) {
-          await member.roles.remove(this.roles[role]);
+        for (let role of this.roles[id]) {
+          await member.roles.remove(this.roleToId[role]);
         }
       }
 
@@ -222,9 +222,9 @@ export class WhenIWorkManager {
 
           // Remove all of the roles they were assigned
           let member = await this.guild.members.fetch(user.ping.slice(2, -1));
-          for (let role of this.roles[id]) {
-            await member.roles.remove(this.roles[role]);
-          }
+          await member.roles.remove(
+            this.roles[id].map((role) => this.roleToId[role]),
+          );
         }
       }
 
