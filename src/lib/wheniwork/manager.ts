@@ -153,16 +153,18 @@ export class WhenIWorkManager {
       // Find which position corresponds to Front Desk and Classroom
       let data: Shifts = await res.json();
       let positionToRole: Record<number, Role> = {};
-      for (let role of ["Front Desk", "Classroom"] as Role[]) {
-        let pos = data.positions.find((pos) => pos.name.includes(role));
-        if (pos) {
-          positionToRole[pos.id] = role;
+      if (data.positions) {
+        for (let role of ["Front Desk", "Classroom"] as Role[]) {
+          let pos = data.positions.find((pos) => pos.name.includes(role));
+          if (pos) {
+            positionToRole[pos.id] = role;
+          }
         }
       }
 
       // Keep track of who is currently on shift
       let currOnShift = new Set<string>();
-      for (let shift of data.shifts) {
+      for (let shift of data.shifts ?? []) {
         currOnShift.add(shift.user_id.toString());
 
         let user = currState.whenIWork.userDict[shift.user_id];
