@@ -28,6 +28,6 @@ export class UsefulCommandModule extends CommandModule {
     ),
   ];
 
-  helpCommand = "!help";
+  helpCommand = "!help\\b";
   helpTitle = "Help";
 }

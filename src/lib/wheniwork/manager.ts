@@ -146,7 +146,9 @@ export class WhenIWorkManager {
 
       // Check if request failed
       if (!res.ok) {
-        console.error("Failed to get shifts");
+        console.error(
+          `Failed to get shifts: Received ${res.status}: ${res.statusText}`,
+        );
         return;
       }
 
