@@ -55,7 +55,7 @@ export class WhenIWorkManager {
     // Continue forever
     while (true) {
       console.info(
-        `Next status check in ${(millis / 1000 / 60).toPrecision(4)} minutes`,
+        `[INFO] [When I Work] Next status check in ${(millis / 1000 / 60).toPrecision(4)} minutes`,
       );
       // Wait until the next check
       await setTimeout(millis);
@@ -137,17 +137,18 @@ export class WhenIWorkManager {
           Authorization: `Bearer ${currState.whenIWork.token}`,
         },
       };
-      let res = await fetch(
-        `https://api.wheniwork.com/2/shifts?\
+      let endpoint = `https://api.wheniwork.com/2/shifts?\
         start=${this.currTime[0]}:${this.currTime[1]}&\
-        end=${this.currTime[0]}:${this.currTime[1] + 1}`,
-        req,
+        end=${this.currTime[0]}:${this.currTime[1] + 1}`;
+      console.info(
+        `[INFO] [When I Work] Sent request to ${endpoint}. Request information was ${req}`,
       );
+      let res = await fetch(endpoint, req);
 
       // Check if request failed
       if (!res.ok) {
         console.error(
-          `Failed to get shifts: Received ${res.status}: ${res.statusText}`,
+          `[ERROR] [When I Work] Failed to get shifts. Received ${res.status}: ${res.statusText}`,
         );
         return;
       }
@@ -276,7 +277,9 @@ export class WhenIWorkManager {
 
       // Check if request succeeded
       if (!res.ok) {
-        console.error("Failed to refresh token");
+        console.error(
+          `[ERROR] [When I Work] Failed to refresh token. Received ${res.status}: ${res.statusText}`,
+        );
         return;
       }
 

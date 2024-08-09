@@ -39,16 +39,17 @@ async function begin() {
   ]);
 
   client.on(Events.ClientReady, () => {
-    console.log(`Successfully logged in as ${client.user!.tag}`);
+    console.info(
+      `[INFO] [Discord] Successfully logged in as ${client.user!.tag}`,
+    );
   });
 
-  // We have to bind to handler, because otherwise it becomes bound to client :(
   client.on(Events.MessageCreate, (msg) =>
     handler
       .execute(msg)
       .catch((err) =>
         console.error(
-          `In message "${msg.content}", encountered the following error: ${err}`,
+          `[ERROR] [Discord] In message "${msg.content}", encountered the following error: ${err}`,
         ),
       ),
   );
@@ -62,7 +63,9 @@ async function begin() {
   wiwManager
     .begin()
     .catch((err) =>
-      console.error(`Encountered error in When I Work Manager: ${err}`),
+      console.error(
+        `[ERROR] [When I Work] Encountered the following error: ${err}`,
+      ),
     );
 }
 

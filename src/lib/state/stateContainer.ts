@@ -40,7 +40,12 @@ export class JSONStateContainer<T> implements IStateContainer<T> {
       // Rename the backup to the actual file, overwriting it.
       await fs.rename(backup, this.file);
     } catch (e) {
-      console.error(e + "\nWrite failed. Attempted content was:\n" + jsonStr);
+      console.error(
+        "[ERROR] [State] " +
+          e +
+          "\nWrite failed. Attempted content was:\n" +
+          jsonStr,
+      );
     }
   }
 
