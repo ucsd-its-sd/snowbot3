@@ -12,7 +12,7 @@ To run the bot, execute `scripts/start.sh`, where `./config/` contains a file `c
 }
 ```
 
-`<token>` being replaced by the bot's token. You may need to run `docker container rm snowbot3` first if you've run the bot before.
+`<token>` being replaced by the bot's token.
 
 To update the image, run `scripts/pull.sh`.
 
