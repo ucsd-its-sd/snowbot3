@@ -1,4 +1,4 @@
-import { Guild, RoleResolvable, Snowflake } from "discord.js";
+import { Guild, Snowflake } from "discord.js";
 import { setTimeout } from "timers/promises";
 
 import jwt from "jsonwebtoken";
@@ -113,7 +113,10 @@ export class WhenIWorkManager {
     let currState = await this.state.read();
 
     // Check if we're closed, if we are clear everything
-    if (this.currTime == this.closingTime) {
+    if (
+      this.currTime[0] == this.closingTime[0] &&
+      this.currTime[1] == this.closingTime[1]
+    ) {
       // Remove all roles from each user
       for (let id in this.roles) {
         let ping = currState.whenIWork.userDict[id]?.ping;
@@ -240,7 +243,10 @@ end=${this.currTime[0]}:${this.currTime[1] + 1}`;
   }
 
   private async updateTime(): Promise<number> {
-    if (this.currTime == this.closingTime) {
+    if (
+      this.currTime[0] == this.closingTime[0] &&
+      this.currTime[1] == this.closingTime[1]
+    ) {
       // If we're at closing time, set the next time to opening time tomorrow
       const tmrw = new Date(Date.now() + 24 * 60 * 60 * 1000);
       this.today = [tmrw.getFullYear(), tmrw.getMonth(), tmrw.getDate()];
