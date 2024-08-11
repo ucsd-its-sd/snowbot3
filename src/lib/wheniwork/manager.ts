@@ -143,16 +143,13 @@ export class WhenIWorkManager {
       let endpoint = `https://api.wheniwork.com/2/shifts?\
 start=${this.currTime[0]}:${this.currTime[1]}&\
 end=${this.currTime[0]}:${this.currTime[1] + 1}`;
-      console.info(
-        `[INFO] [When I Work] Sent request to ${endpoint}. Request information was `,
-        req,
-      );
+      console.info(`[INFO] [When I Work] Sent request to ${endpoint}.`);
       let res = await fetch(endpoint, req);
 
       // Check if request failed
       if (!res.ok) {
         console.error(
-          `[ERROR] [When I Work] Failed to get shifts. Received ${res.status}: ${res.statusText}`,
+          `[ERROR] [When I Work] Failed to get shifts. Received ${res.status}: ${res.statusText}. Response: ${res.text()}`,
         );
         return;
       }
