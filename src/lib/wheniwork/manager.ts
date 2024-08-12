@@ -277,7 +277,7 @@ end=${this.currTime[0]}:${this.currTime[1] + 1}`;
           Authorization: `Bearer ${currState.whenIWork.token}`,
         },
       };
-      let res = await fetch("https://api.wheniwork.com/2/refresh", req);
+      let res = await fetch("https://api.login.wheniwork.com/refresh", req);
 
       // Check if request succeeded
       if (!res.ok) {
