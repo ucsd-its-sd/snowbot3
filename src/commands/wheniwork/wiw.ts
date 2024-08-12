@@ -63,6 +63,32 @@ export class RegisterWhenIWorkCommand extends Command {
   }
 }
 
+export class ListWhenIWorkCommand extends Command {
+  regex = /^!wiw list$/;
+  name = "!wiw list";
+  description = "Lists all registered WhenIWork users.";
+
+  async execute(
+    msg: Message,
+    match: CommandMatch,
+    state: IStateContainer<State>,
+  ): Promise<void> {
+    if (!isAdmin(msg)) {
+      return;
+    }
+
+    const currState = await state.read();
+
+    let users = Object.entries(currState.whenIWork.userDict).map(
+      ([id, user]) => {
+        return `${id}: ${user.email} -> ${user.ping}`;
+      },
+    );
+
+    msg.channel.send(users.join("\n"));
+  }
+}
+
 // Helper Functions
 
 function isAdmin(msg: Message): boolean {

@@ -1,9 +1,9 @@
 import { CommandModule } from "../../lib/command";
-import { RegisterWhenIWorkCommand } from "./wiw";
+import { ListWhenIWorkCommand, RegisterWhenIWorkCommand } from "./wiw";
 
 export class WhenIWorkCommandModule extends CommandModule {
-  commands = [new RegisterWhenIWorkCommand()];
-  
+  commands = [new RegisterWhenIWorkCommand(), new ListWhenIWorkCommand()];
+
   helpCommand = "!wiw help";
   helpTitle = "When I Work Help";
 }
