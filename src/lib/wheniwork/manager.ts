@@ -88,7 +88,7 @@ export class WhenIWorkManager {
     let millis: number;
     if (now < opening) {
       // If we haven't opened yet, wait until opening time
-      this.currTime = this.openingTime;
+      this.currTime = [...this.openingTime];
       millis = opening.getTime() - now.getTime();
     } else {
       // If we're open, find the next quarter-hour (either round up to 15 or add an hour)
@@ -247,7 +247,7 @@ end=${this.currTime[0]}:${this.currTime[1] + 1}`;
       // If we're at closing time, set the next time to opening time tomorrow
       const tmrw = new Date(Date.now() + 24 * 60 * 60 * 1000);
       this.today = [tmrw.getFullYear(), tmrw.getMonth(), tmrw.getDate()];
-      this.currTime = this.openingTime;
+      this.currTime = [...this.openingTime];
 
       // Check if we have to update the token (we want to do this at least once a day)
       this.updateToken();
