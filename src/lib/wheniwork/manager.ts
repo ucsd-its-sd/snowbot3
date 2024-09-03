@@ -40,13 +40,20 @@ export class WhenIWorkManager {
   async begin(): Promise<void> {
     const currState = await this.state.read();
 
-    // Mark those who were saved as on shift so we can remove their lingering roles
+    // Clean up the dictionary
     for (let id in currState.whenIWork.userDict) {
       let user = currState.whenIWork.userDict[id];
 
-      if (user && (user.scheduled || user.punched)) {
-        this.roles[id] = [];
-      }
+      user.scheduled = false;
+      user.punched = false;
+    }
+
+    // Remove the roles from everyone
+    for (let roleId of Object.values(this.roleToId)) {
+      let role = (await this.guild.roles.fetch(roleId))!;
+      role.members.forEach(async (member) => {
+        await member.roles.remove(role);
+      });
     }
 
     // Initialize state and get the time to wait
@@ -60,8 +67,14 @@ export class WhenIWorkManager {
       // Wait until the next check
       await setTimeout(millis);
 
-      // Update on-shift status
-      await this.updateStatus();
+      // Try to update on-shift status
+      try {
+        await this.updateStatus();
+      } catch (err) {
+        console.error(
+          `[ERROR] [When I Work] Encountered the following error while updating: ${err}`,
+        );
+      }
 
       // Update current time and get time to wait
       millis = await this.updateTime();
