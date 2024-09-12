@@ -49,11 +49,16 @@ export class WhenIWorkManager {
     }
 
     // Remove the roles from everyone
+    const toRemove = new Map();
     for (let roleId of Object.values(this.roleToId)) {
       let role = (await this.guild.roles.fetch(roleId))!;
-      role.members.forEach(async (member) => {
-        await member.roles.remove(role);
+      role.members.forEach((member) => {
+        let existing = toRemove.get(member);
+        toRemove.set(member, existing ? [...existing, role] : [role]);
       });
+    }
+    for (let [member, roles] of toRemove) {
+      await member.roles.remove(roles);
     }
 
     // Initialize state and get the time to wait
@@ -125,7 +130,7 @@ export class WhenIWorkManager {
   private async updateStatus(): Promise<void> {
     let currState = await this.state.read();
 
-    // Check if we're closed, if we are clear everything
+    // Check if we're closed, if we are, clear everything
     if (
       this.currTime[0] == this.closingTime[0] &&
       this.currTime[1] == this.closingTime[1]
@@ -193,16 +198,8 @@ end=${this.currTime[0]}:${this.currTime[1] + 1}`;
           // Get the member object from the user's snowflake
           let member = await this.guild.members.fetch(user.ping.slice(2, -1));
 
-          // Remove any previous roles they may have had
-          // This is a little inefficient, because I'm removing On Shift
-          // just to add it again, but it's not inefficient enough to matter
-          // Since all we need is that this finishes within 15 minutes,
-          // and this will probably finish in a couple seconds.
-          // If this was blocking it might matter, but it's not so it can
-          // do other things in the meantime.
-          for (let role of this.roles[shift.user_id] ?? []) {
-            await member.roles.remove(this.roleToId[role]);
-          }
+          // Save the old roles for comparison
+          let prevRoles = new Set<Role>(this.roles[shift.user_id]);
 
           // Initialize the new roles array
           this.roles[shift.user_id] = ["On Shift"];
@@ -217,6 +214,15 @@ end=${this.currTime[0]}:${this.currTime[1] + 1}`;
           if (currState.leads.some((lead) => lead.ping == user.ping)) {
             this.roles[shift.user_id].push("Leads");
           }
+
+          // Filter out the roles that are still in use
+          for (let role of this.roles[shift.user_id]) {
+            prevRoles.delete(role);
+          }
+          // Remove the roles that are no longer in use
+          await member.roles.remove(
+            [...prevRoles].map((role) => this.roleToId[role]),
+          );
 
           console.info(
             `[INFO] [When I Work] Included roles are ${this.roles[shift.user_id].join(", ")}`,
