@@ -48,6 +48,9 @@ export class WhenIWorkManager {
       user.punched = false;
     }
 
+    // Load all members in the guild
+    await this.guild.members.fetch();
+
     // Remove the roles from everyone
     const toRemove = new Map();
     for (let roleId of Object.values(this.roleToId)) {
@@ -57,9 +60,6 @@ export class WhenIWorkManager {
         toRemove.set(member, existing ? [...existing, role] : [role]);
       });
     }
-    console.info(
-      `[INFO] [When I Work] Will remove ${JSON.stringify(Object.fromEntries(toRemove.entries()))}`,
-    );
     for (let [member, roles] of toRemove) {
       await member.roles.remove(roles);
     }

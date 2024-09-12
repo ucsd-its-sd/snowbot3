@@ -15,6 +15,7 @@ async function begin() {
     intents: [
       GatewayIntentBits.Guilds,
       GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.GuildMembers,
       GatewayIntentBits.MessageContent,
     ],
   });
