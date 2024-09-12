@@ -218,6 +218,15 @@ end=${this.currTime[0]}:${this.currTime[1] + 1}`;
             this.roles[shift.user_id].push("Leads");
           }
 
+          console.info(
+            `[INFO] [When I Work] Included roles are ${this.roles[shift.user_id].join(", ")}`,
+          );
+          console.info(
+            `[INFO] [When I Work] Known role conversions are ${JSON.stringify(positionToRole)}`,
+          );
+          console.info(
+            `[INFO] [When I Work] Known role IDs are ${JSON.stringify(this.roleToId)}`,
+          );
           // Add all the relevant roles
           await member.roles.add(
             this.roles[shift.user_id].map((role) => this.roleToId[role]),
