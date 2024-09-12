@@ -57,6 +57,9 @@ export class WhenIWorkManager {
         toRemove.set(member, existing ? [...existing, role] : [role]);
       });
     }
+    console.info(
+      `[INFO] [When I Work] Will remove ${JSON.stringify(Object.fromEntries(toRemove.entries()))}`,
+    );
     for (let [member, roles] of toRemove) {
       await member.roles.remove(roles);
     }
