@@ -10,6 +10,9 @@ export class FiredHiredCommand extends Command {
   firedStack: string[] = [];
   lastReset = new Date();
 
+  readonly noGIF =
+    "https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888";
+
   readonly hireJokes = [
     " is still gonna be fired actually.",
     " has been rehired! All your shifts start at 6:45am.",
@@ -56,9 +59,7 @@ export class FiredHiredCommand extends Command {
 
       // If there's no one to fire, cancel.
       if (fireable.length == 0) {
-        await msg.channel.send(
-          "https://tenor.com/view/no-i-dont-think-i-will-gif-23864982",
-        );
+        await msg.channel.send(this.noGIF);
         return;
       }
 
@@ -71,9 +72,7 @@ export class FiredHiredCommand extends Command {
     } else {
       // If there's no one to hire, don't hire anyone.
       if (this.firedStack.length == 0) {
-        await msg.channel.send(
-          "https://tenor.com/view/no-i-dont-think-i-will-gif-23864982",
-        );
+        await msg.channel.send(this.noGIF);
         return;
       }
 
