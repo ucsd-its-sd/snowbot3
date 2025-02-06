@@ -1,4 +1,4 @@
-import { Guild, Snowflake } from "discord.js";
+import { Guild, GuildMember, Snowflake } from "discord.js";
 import { setTimeout } from "timers/promises";
 
 import jwt from "jsonwebtoken";
@@ -161,10 +161,11 @@ export class WhenIWorkManager {
           Authorization: `Bearer ${currState.whenIWork.token}`,
         },
       };
+
       let endpoint = `https://api.wheniwork.com/2/shifts?\
 start=${this.currTime[0]}:${this.currTime[1]}&\
 end=${this.currTime[0]}:${this.currTime[1] + 1}`;
-      console.info(`[INFO] [When I Work] Sent request to ${endpoint}.`);
+
       let res = await fetch(endpoint, req);
 
       // Check if request failed
@@ -198,8 +199,17 @@ end=${this.currTime[0]}:${this.currTime[1] + 1}`;
         if (user) {
           user.scheduled = true;
 
-          // Get the member object from the user's snowflake
-          let member = await this.guild.members.fetch(user.ping.slice(2, -1));
+          let member: GuildMember;
+          try {
+            // Get the member object from the user's snowflake
+            member = await this.guild.members.fetch(user.ping.slice(2, -1));
+          } catch (err) {
+            console.error(
+              `[ERROR] [When I Work] Failed to fetch member ${user.ping} for user ${user.email}`,
+            );
+            delete currState.whenIWork.userDict[shift.user_id];
+            continue;
+          }
 
           // Save the old roles for comparison
           let prevRoles = new Set<Role>(this.roles[shift.user_id]);
@@ -225,16 +235,6 @@ end=${this.currTime[0]}:${this.currTime[1] + 1}`;
           // Remove the roles that are no longer in use
           await member.roles.remove(
             [...prevRoles].map((role) => this.roleToId[role]),
-          );
-
-          console.info(
-            `[INFO] [When I Work] Included roles are ${this.roles[shift.user_id].join(", ")}`,
-          );
-          console.info(
-            `[INFO] [When I Work] Known role conversions are ${JSON.stringify(positionToRole)}`,
-          );
-          console.info(
-            `[INFO] [When I Work] Known role IDs are ${JSON.stringify(this.roleToId)}`,
           );
           // Add all the relevant roles
           await member.roles.add(
