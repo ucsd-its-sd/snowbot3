@@ -3,6 +3,13 @@ import { CommandModule } from "./commandModule";
 import { Command, CommandMatch } from "./command";
 import { State, IStateContainer } from "../state";
 
+/**
+ * Manages the parsing and execution of commands, as well as auto-generating help commands.
+ *
+ * @example
+ * const handler = await CommandHandler.create(state, [new MyCommandModule()]);
+ * client.on(Events.MessageCreate, (msg) => handler.execute(msg));
+ */
 export class CommandHandler {
   modules: CommandModule[];
 
@@ -10,8 +17,11 @@ export class CommandHandler {
 
   state: IStateContainer<State>;
 
+  // The precompiled regex for all commands.
   private combinedRegex: RegExp;
 
+  // Minimal constructor for internal use; use `create` instead.
+  // Can't have a public constructor because we need an async context.
   private constructor(state: IStateContainer<State>, modules: CommandModule[]) {
     this.state = state;
     this.modules = modules;
@@ -23,6 +33,13 @@ export class CommandHandler {
     this.combinedRegex = this.buildRegex();
   }
 
+  /**
+   * Creates a new CommandHandler instance, initializing all commands.
+   *
+   * @param state The state container to use.
+   * @param modules The command modules to use.
+   * @returns A new CommandHandler instance.
+   */
   public static async create(
     state: IStateContainer<State>,
     modules: CommandModule[],
@@ -42,6 +59,12 @@ export class CommandHandler {
     return handler;
   }
 
+  /**
+   * Executes a command based on the message content.
+   *
+   * @param msg The message to parse and execute.
+   * @returns A promise that resolves when the command has been executed.
+   */
   async execute(msg: Message): Promise<void> {
     if (msg.author.bot) return;
 

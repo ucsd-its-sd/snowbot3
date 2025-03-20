@@ -1,19 +1,40 @@
 import { PathLike, readFileSync } from "fs";
 import * as fs from "fs/promises";
 
+/**
+ * Represents a state container, an implementation agnostic abstraction over state.
+ */
 export interface IStateContainer<T> {
-  /** Gets the current state. */
+  /**
+   * Reads the current state.
+   *
+   * @returns The current state.
+   */
   read(): Promise<T>;
 
-  /** Updates the state. */
+  /**
+   * Writes an updated state.
+   *
+   * @param state The new state.
+   * @returns A promise that resolves when the state has been written.
+   */
   write(state: T): Promise<void>;
 }
 
+/**
+ * A state container that uses a JSON file to store state.
+ */
 export class JSONStateContainer<T> implements IStateContainer<T> {
   private readonly file: PathLike;
 
   private state: T;
 
+  /**
+   * Creates a new JSON state container.
+   *
+   * @param file The file to store/read the state in
+   * @returns A new JSON state container
+   */
   constructor(file: PathLike) {
     this.file = file;
 
@@ -27,6 +48,7 @@ export class JSONStateContainer<T> implements IStateContainer<T> {
   }
 
   async read(): Promise<T> {
+    // We keep the state in memory, so we don't need to look at the file
     return this.state;
   }
 
@@ -49,14 +71,23 @@ export class JSONStateContainer<T> implements IStateContainer<T> {
     }
   }
 
+  /**
+   * Initializes the state container, and creates a watcher on the file to keep the state up to date.
+   * @returns Never resolves; watches the file for changes and updates the state.
+   */
   private async init(): Promise<void> {
+    // Create an abort controller to cancel the watcher;
+    // could be used to stop the watcher externally in the future, if needed.
     const ac = new AbortController();
+    // Extract the signal from the controller.
     const { signal } = ac;
 
     try {
+      // Create a watcher (stream of edit events) on the file.
+      // Not persistent since we don't need to watch if the bot is fully stopped.
       const watcher = fs.watch(this.file, { persistent: false, signal });
 
-      // Every time we get a new event, re-read the file.
+      // Every time we get a new event, re-parse the file.
       for await (const e of watcher) {
         this.state = await fs
           .readFile(this.file, "utf-8")
@@ -64,8 +95,7 @@ export class JSONStateContainer<T> implements IStateContainer<T> {
           .then((x) => x as T);
       }
     } catch (err) {
-      // This isn't used at the moment but I've left it in
-      // in case someone uses the aborter later.
+      // This isn't used at the moment but I've left it in, in case someone uses the aborter later.
       if (err instanceof Error && err.name == "AbortError") {
         return;
       }

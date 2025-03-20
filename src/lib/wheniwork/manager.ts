@@ -11,10 +11,14 @@ type Time = [number, number];
 
 type Role = "On Shift" | "Leads" | "Front Desk" | "Classroom";
 
+/**
+ * Manages WhenIWork users, assigning roles to on-shift users.
+ */
 export class WhenIWorkManager {
   readonly openingTime: Time = [6, 45];
   readonly closingTime: Time = [22, 15];
 
+  // The current day and time (starts undefined, but will be set in `begin`)
   today: Day = undefined!;
   currTime: Time = [0, 0];
 
@@ -32,15 +36,26 @@ export class WhenIWorkManager {
   private guild: Guild;
   private state: IStateContainer<State>;
 
+  /**
+   * Create a new WhenIWorkManager.
+   * @param guild The Discord server to run this in (the ITS server)
+   * @param state The state of the bot
+   */
   constructor(guild: Guild, state: IStateContainer<State>) {
     this.guild = guild;
     this.state = state;
   }
 
+  /**
+   * Begins the manager, will update the roles of users every 15 minutes.
+   *
+   * @returns Never resolves unless the manager fails.
+   */
   async begin(): Promise<void> {
+    // Get the current state
     const currState = await this.state.read();
 
-    // Clean up the dictionary
+    // Set all users to off-shift to start, clearing any previous state
     for (let id in currState.whenIWork.userDict) {
       let user = currState.whenIWork.userDict[id];
 
@@ -48,18 +63,21 @@ export class WhenIWorkManager {
       user.punched = false;
     }
 
-    // Load all members in the guild
+    // Load all members in the guild (we'll be requesting users often)
     await this.guild.members.fetch();
 
-    // Remove the roles from everyone
+    // Remove any lingering roles from previous runs
     const toRemove = new Map();
+    // Loop through all relevant roles
     for (let roleId of Object.values(this.roleToId)) {
+      // For each member with the role, add them to the map, or if they exist already, append the role
       let role = (await this.guild.roles.fetch(roleId))!;
       role.members.forEach((member) => {
         let existing = toRemove.get(member);
         toRemove.set(member, existing ? [...existing, role] : [role]);
       });
     }
+    // For each member with relevant roles, clear the roles from them
     for (let [member, roles] of toRemove) {
       await member.roles.remove(roles);
     }
@@ -72,7 +90,7 @@ export class WhenIWorkManager {
       console.info(
         `[INFO] [When I Work] Next status check in ${(millis / 1000 / 60).toPrecision(4)} minutes`,
       );
-      // Wait until the next check
+      // Wait until the next update
       await setTimeout(millis);
 
       // Try to update on-shift status
@@ -89,7 +107,11 @@ export class WhenIWorkManager {
     }
   }
 
-  /// Set up the initial state, return milliseconds until next check
+  /**
+   * Set up the initial state of the manager.
+   *
+   * @returns Milliseconds until the next update (should be done by `updateStatus` after the first check).
+   */
   private async init(): Promise<number> {
     // Get the current date, and calculate the closing time
     const now = new Date();
@@ -130,6 +152,11 @@ export class WhenIWorkManager {
     return millis;
   }
 
+  /**
+   * The bulk of the processing of the manager, to be run every 15 minutes.
+   *
+   * @returns Resolves after all users are updated.
+   */
   private async updateStatus(): Promise<void> {
     let currState = await this.state.read();
 
@@ -270,12 +297,17 @@ end=${this.currTime[0]}:${this.currTime[1] + 1}`;
     }
   }
 
+  /**
+   * Updates the current time, checks if the token needs to be refreshed, and calculates the time until next update.
+   *
+   * @returns Milliseconds until the next update.
+   */
   private async updateTime(): Promise<number> {
     if (
       this.currTime[0] == this.closingTime[0] &&
       this.currTime[1] == this.closingTime[1]
     ) {
-      // If we're at closing time, set the next time to opening time tomorrow
+      // If we're at closing time, set the current time (for the next update) to opening time tomorrow
       const tmrw = new Date(Date.now() + 24 * 60 * 60 * 1000);
       this.today = [tmrw.getFullYear(), tmrw.getMonth(), tmrw.getDate()];
       this.currTime = [...this.openingTime];
@@ -296,6 +328,11 @@ end=${this.currTime[0]}:${this.currTime[1] + 1}`;
     return nextDate.getTime() - Date.now();
   }
 
+  /**
+   * Checks if the WhenIWork API token needs to be updated
+   *
+   * @returns Resolves when the WhenIWork token has been updated (or immediately if not needed).
+   */
   private async updateToken(): Promise<void> {
     const currState = await this.state.read();
     let timeSinceIssue = Date.now() - currState.whenIWork.iat;

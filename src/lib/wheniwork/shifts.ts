@@ -1,3 +1,5 @@
+// Implements the relevant JSON structures to read results from the WhenIWork API
+
 export interface Shifts {
   shifts: Shift[];
   users: User[];

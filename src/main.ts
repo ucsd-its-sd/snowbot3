@@ -10,13 +10,16 @@ import {
 } from "./commands";
 import { WhenIWorkManager } from "./lib/wheniwork/manager";
 
+/**
+ * The main entry point for the bot (required to get an async context).
+ */
 async function begin() {
   const client = new Client({
     intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMessages,
-      GatewayIntentBits.GuildMembers,
-      GatewayIntentBits.MessageContent,
+      GatewayIntentBits.Guilds, // To get the ITS Service (for WhenIWork)
+      GatewayIntentBits.GuildMessages, // To see all messages
+      GatewayIntentBits.GuildMembers, // To get member information (for WhenIWork)
+      GatewayIntentBits.MessageContent, // To read message content
     ],
   });
 
@@ -27,24 +30,28 @@ async function begin() {
   // the token, this is acceptable, but there are many better ways to do this.
   const state = new JSONStateContainer<State>("./config/config.json");
 
-  // Create this first to get the phonebook from it
+  // We create this before the handler since we need to get the phonebook module from it
   const lead = new LeadCommandModule();
 
+  // Create the command handler, responsible for parsing each message for commands
+  // It takes in an array of modules, listed in order of priority
   const handler = await CommandHandler.create(state, [
     new UsefulCommandModule(),
     new LessUsefulCommandModule(),
     lead,
     lead.phonebook,
     new WhenIWorkCommandModule(),
-    new BackupCommandModule(),
+    new BackupCommandModule(), // Catches malformed commands
   ]);
 
+  // Report when the client is ready
   client.on(Events.ClientReady, () => {
     console.info(
       `[INFO] [Discord] Successfully logged in as ${client.user!.tag}`,
     );
   });
 
+  // Read each message to see if it is a command
   client.on(Events.MessageCreate, (msg) =>
     handler
       .execute(msg)
@@ -58,7 +65,7 @@ async function begin() {
   // Login with the token from the state
   await client.login((await state.read()).token);
 
-  // Create the When I Work Manager
+  // Create the When I Work Manager, which assigns roles based on the schedule
   const serviceDeskGuild = await client.guilds.fetch("759484837366857748");
   const wiwManager = new WhenIWorkManager(serviceDeskGuild, state);
   wiwManager
@@ -70,4 +77,5 @@ async function begin() {
     );
 }
 
+// Start the bot
 begin();
